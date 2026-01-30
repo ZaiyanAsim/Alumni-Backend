@@ -24,7 +24,7 @@ namespace Alumni_Portal.TenantConfiguration
             return await _individualParameters.GetUserDirectoryParameters();
         }
 
-        public async Task<List<Parameter_Base_DTO>?> ProjectCreateMetadata()
+        public async Task<List<Parameter_Base_String_DTO>?> ProjectCreateMetadata()
         {
             var metadata = await _individualParameters.GetSupervisorsAsync();
             return metadata;

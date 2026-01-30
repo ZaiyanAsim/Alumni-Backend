@@ -7,7 +7,7 @@ namespace Entity_Directories.Services.Abstractions
     
         public interface IProjectRepository
     {
-            public IQueryable<projectDTO> getProjects(ProjectFilters filters);
+            public IQueryable<projectDTO>getProjects(ProjectFilters filters);
             public Task<projectDTO?> getProjectsByAcademicID(string projectAcademicID);
 
             public  Task<int> CreateAsync(Projects project);

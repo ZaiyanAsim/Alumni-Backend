@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Shared.Custom_Exceptions.ExceptionClasses;
 using Alumni_Portal.Infrastructure.Persistance;
 using Alumni_Portal.Infrastrcuture.Data_Models;
+
 namespace Entity_Directories.Repositories
 {
 
@@ -21,7 +22,7 @@ namespace Entity_Directories.Repositories
         public ProjectRepository(ProjectDbContext context, IndividualDbContext individualContext)
         {
             _context = context;
-            _individualContext =individualContext;
+            _individualContext = individualContext;
         }
 
         private static Expression<Func<Projects, projectDTO>> ProjectToDTO()
@@ -42,10 +43,15 @@ namespace Entity_Directories.Repositories
         public IQueryable<projectDTO> getProjects(ProjectFilters filters)
         {
 
-            return _context.Projects
+            var projects = _context.Projects
                           .Where(p => filters.Types == null || filters.Types.Count == 0 || filters.Types.Contains(p.Project_Type_ID))
                           .Select(ProjectToDTO())
                           .OrderByDescending(p => p.Project_Year);
+
+
+            return projects;
+
+          
         }
 
         public async Task<projectDTO?> getProjectsByAcademicID(string projectAcademicID)
@@ -63,13 +69,13 @@ namespace Entity_Directories.Repositories
 
         public async Task<int> CreateAsync(Projects project)
         {
-            
-               _context.Projects.Add(project);
-               await  _context.SaveChangesAsync();
 
-               return project.Project_ID;
-            
-            
+            _context.Projects.Add(project);
+            await _context.SaveChangesAsync();
+
+            return project.Project_ID;
+
+
 
         }
 
@@ -77,9 +83,10 @@ namespace Entity_Directories.Repositories
 
         public async Task AddProjectMembersAsync(List<Project_Individuals> members)
         {
-            
+
             _context.Project_Individuals.AddRange(members);
-            
+            _context.SaveChangesAsync();
+
         }
 
         public async Task RollBackAsync()
@@ -90,11 +97,10 @@ namespace Entity_Directories.Repositories
 
 
 
-    }
-
 
 
 
     }
+}
 
     

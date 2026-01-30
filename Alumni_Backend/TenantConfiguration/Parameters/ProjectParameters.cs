@@ -22,18 +22,19 @@ namespace Alumni_Portal.TenantConfiguration.Parameter
                                          {
                                              ParameterName = p.Parameter_Name,
                                              ID = pv.Parameter_Value_ID,
-                                             Value = pv.Parameter_Value_Name
+                                             Value = pv.Parameter_Value_Name,
+                                             AlternateValue=pv.Parameter_Value_Text
                                          }).ToListAsync();
 
             return new ProjectDirectoryParams
             {
                 ProjectTypes = parameterGroups
                     .Where(x => x.ParameterName == "Project Type")
-                    .Select(x => new Parameter_Base_DTO { ID = x.ID, Value = x.Value })
+                    .Select(x => new Parameter_Base_DTO { ID = x.ID, Value = x.Value, AlternateValue=x.AlternateValue })
                     .ToList(),
                 ProjectIndustries = parameterGroups
                     .Where(x => x.ParameterName == "Project_Industry")
-                    .Select(x => new Parameter_Base_DTO { ID = x.ID, Value = x.Value })
+                    .Select(x => new Parameter_Base_DTO { ID = x.ID, Value = x.Value, AlternateValue=x.AlternateValue })
                     .ToList()
             };
 

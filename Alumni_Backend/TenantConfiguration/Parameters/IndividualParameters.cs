@@ -40,13 +40,14 @@ namespace Alumni_Portal.TenantConfiguration.Parameter
             };
         }
 
-        public async Task<List<Parameter_Base_DTO>?> GetSupervisorsAsync()
+        public async Task<List<Parameter_Base_String_DTO>?> GetSupervisorsAsync()
         {
-            var supervisorList= await _individualContext.Individuals.
-                                     Where(i=>i.Individual_Type_Value=="Supervisor")
-                                     .Select (i=> new Parameter_Base_DTO
+            var supervisorList= await _individualContext.Individuals
+                                      
+                                     .Where(i=>i.Individual_Type_Value=="Supervisor")
+                                     .Select (i=> new Parameter_Base_String_DTO
                                      {
-                                         ID=i.Individual_ID,
+                                         ID=i.Individual_Institution_ID,
                                          Value=i.Individual_Name
 
                                      }).ToListAsync ();

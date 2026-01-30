@@ -28,7 +28,7 @@ namespace Entity_Directories.Services.DTO
         public class ProjectIndividualDTO
         {
             public required string Individual_Institution_ID { get; set; }
-            public required string Individual_Role { get; set; }
+            public  string Individual_Role { get; set; }
             
 
          

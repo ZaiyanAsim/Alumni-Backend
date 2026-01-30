@@ -28,17 +28,30 @@ namespace Entity_Directories.Services
             return await _projectRepo.getProjectsByAcademicID(projectAcademicID.ToUpper());
         }
 
-        public async Task<List<projectDTO>> GetProjectsPaginated(ProjectFilters filters, int _page, int _limit)
+        public async Task<PaginatedResult<projectDTO>> GetProjectsPaginated(ProjectFilters filters, int _page, int _limit)
         {
             
             if (_page > 0 || _limit > 0)
             {
 
-                var users = await _projectRepo.getProjects(filters)
-                        .Skip((_page - 1) * _limit)
-                        .Take(_limit)
-                        .ToListAsync();
-                return users;
+
+                var query =  _projectRepo.getProjects(filters);
+
+                int count = await _sharedRepo.CountAsync(query);
+                
+               var projects =await query.
+                    Skip((_page-1)*_limit)
+                    .Take(_limit)
+                    .ToListAsync();
+
+                return new PaginatedResult<projectDTO>
+                {
+                    Data = projects,
+                    TotalRecords = count,
+                    _page = _page,
+                    _size = _limit
+
+                };
             }
 
            
@@ -49,8 +62,12 @@ namespace Entity_Directories.Services
 
         public async Task<int> CreateProject(CreateProjectDTO newProject)
         {
-            await _sharedRepo.Project_Exists_Async(newProject.Project_Academic_ID);
-            
+            int id=await _sharedRepo.Project_Exists_Async(newProject.Project_Academic_ID);
+
+            if (id != 0)
+            {
+                throw new ValidationException("Project with this id already exists");
+            }
             
             var project = new Projects
             {
@@ -84,20 +101,28 @@ namespace Entity_Directories.Services
 
             int projectid = await _sharedRepo.Project_Exists_Async(project_ID);
 
+            if (projectid == 0)
+            {
+                throw new ValidationException("Project with this ID does not exist");
+            }
             
             
             var project_Individuals = new List<Project_Individuals>();
             foreach (var member in members)
             {
                 int id = await _sharedRepo.Individual_Exists_Async(member.Individual_Institution_ID);
-                await _sharedRepo.Individual_Has_ProjectAsync(id);
+                if (id == 0)
+                {
+                    throw new ValidationException("Individual with ID " + member.Individual_Institution_ID + " does not exist.");
+                }
+                await _sharedRepo.Individual_Has_ProjectAsync(member.Individual_Institution_ID,id,projectid);
 
                  project_Individuals.Add(  new Project_Individuals
                  {
 
                      Project_ID = projectid,
                      Individual_ID = id,
-                     // Add other meta data here 
+                     
                  });
 
             }

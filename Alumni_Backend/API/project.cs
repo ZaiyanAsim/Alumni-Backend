@@ -74,9 +74,10 @@ namespace Admin.Controllers
 
 
         }
+
         [HttpPost("create/members/{projectId}")]
 
-        public async Task<IActionResult> AddProjectMembers(List<ProjectIndividualDTO> members, string projectId)
+        public async Task<IActionResult> AddProjectMembers(string projectId,List<ProjectIndividualDTO> members)
         {
             if (!ModelState.IsValid)
             {
@@ -89,6 +90,8 @@ namespace Admin.Controllers
             {
                 status = "Successful",
                 message = $"Members added to Project {projectId}",
+                projectId=projectId
+
             };
 
 

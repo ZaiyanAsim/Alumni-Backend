@@ -22,6 +22,17 @@ builder.Services.AddScoped<ITenantService, TenantService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendPolicy", policy =>
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod());
+});
+
+
+
+
 //builder.Services.AddScoped<userHandler>();
 //builder.Services.AddScoped<projectHandler>();
 //builder.Services.AddScoped<IUserService, userRepository>();
@@ -49,7 +60,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors("FrontendPolicy");
 
 app.UseHttpsRedirection();
 app.UseExceptionHandler();
