@@ -75,36 +75,36 @@ namespace Entity_Directories.Repositories.MappingExpressions
 
         public static Expression<Func<NewUserDTO, Individuals>> NewUserMapping()
         {
-            //return n => new Individuals
-            //{
-            //    Individual_Institution_ID = n.Individual_Institution_ID,
-            //    Individual_Name = n.Individual_Name,
-            //    Individual_Email = n.Individual_Email,
-            //    Individual_Type_Value = n.Individual_Type_Value,
-            //    Campus_ID = n.Campus_ID,
-            //    Client_ID = n.Client_ID,
-            //    Campus_Reference_Key = n.Campus_Reference_Key,
-            //    Client_Reference_Key = n.Client_Reference_Key,
-            //    Individual_Is_Alumni = n.Individual_Is_Alumni,
-            //    Individual_Contact_Number_Primary = n.Individual_Contact_Number_Primary,
+            return n => new Individuals
+            {
+                Individual_Institution_ID = n.Institution_ID,
+                Individual_Name = n.Name,
+                Individual_Email = n.Email,
+                Individual_Type_ID = n.Type_ID,
+                Individual_Type_Value = n.Type_Value,
+                Campus_ID = n.Campus_ID,
+                Client_ID = n.Client_ID,
+                Individual_Is_Alumni = n.Is_Alumni,
+                Individual_Contact_Number_Primary = n.Contact_Number,
 
-            //    Academic_Details= n.Academic_Details.Select(a => new Individual_Academics
-            //    {
- 
-            //        Individual_Academic_Student_ID = a.Student_ID,
-            //        Individual_Academic_Program_ID=a.Program_ID,
-            //        Individual_Academic_Program_Value = a.Program,
-            //        Individual_Academic_Batch=a.Batch,
-            //        Individual_Academic_Enrollment_Year = a.Enrollment_Year,
-            //        Individual_Academic_Graduation_Year = a.Graduation_Year,
-            //        Individual_Academic_Department_ID=a.Department_ID,
-            //        Individual_Academic_Department_Value = a.Department,
-            //        Individual_Academic_Designation=a.Designation
-                    
-            //    }).ToList()
+                // Only map Academic_Details if it exists and has items
+                Academic_Details = n.Academic_Details.Any() == true
+                ? n.Academic_Details.Select(a => new Individual_Academics
+            {
+                Individual_Academic_Program_ID = a.Program_ID,
+                Individual_Academic_Program_Value = a.Program_Value,
+                Individual_Academic_Department_ID = a.Department_ID,
+                Individual_Academic_Department_Value = a.Department_Value,
+                Individual_Academic_Enrollment_Year = a.Enrollment_Year,
+                Individual_Academic_Graduation_Year = a.Graduation_Year,
+                Individual_Academic_Designation = a.Designation_Value,
+                Individual_Academic_Designation_ID = a.Designation_ID,
+             }).ToList()
+            : null  
+            };
 
-            //};
-            return null!;
+
+
         }
 
 

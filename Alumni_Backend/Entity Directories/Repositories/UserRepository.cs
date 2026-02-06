@@ -48,7 +48,7 @@ namespace Entity_Directories.Repositories
             };
         }
 
-        public async Task<int> Create(NewUserDTO newUser)
+        public async Task Create(NewUserDTO newUser)
         {
             try
 
@@ -56,7 +56,7 @@ namespace Entity_Directories.Repositories
                 var user= UserMappings.NewUserMapping().Compile().Invoke(newUser);
                 _context.Individuals.Add(user);
                 await _context.SaveChangesAsync();
-                return user.Individual_ID;
+                return ;
                 
             }
             catch (DbUpdateException ex)

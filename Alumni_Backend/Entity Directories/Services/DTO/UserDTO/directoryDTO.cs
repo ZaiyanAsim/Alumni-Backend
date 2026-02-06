@@ -40,35 +40,36 @@ namespace Entity_Directories.Services.DTO
 
     }
 
+
+        
     public class ProgramInfoDTO
+      
     {
-
-        
-      
         public string? Program { get; set; }
-
-
-        
-       
-
-
-        
-        //public string? Batch { get; init; }
-
-
-        //public int? Enrollment_Year { get; init; }
-
-
-        public int? Graduation_Year { get; init; }
-
-
-      
         public string? Department { get; init; }
-
-
-      
+        public int? Enrollment_Year { get; init; }
+        public int? Graduation_Year { get; init; }
         public string? Designation { get; init; }
     }
+
+
+        
+
+
+
+
+  
+
+
+
+
+
+
+      
+
+        
+      
+        
 
     public class BaseUserDTO
     {

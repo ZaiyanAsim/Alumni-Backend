@@ -134,7 +134,7 @@ namespace Entity_Directories.Services
         public async Task<List<int>> DeleteProjectsBulk(List<int> projectIDs)
         {
             
-            
+
                return await _projectRepo.DeleteBulkAsync(projectIDs);
               
         }

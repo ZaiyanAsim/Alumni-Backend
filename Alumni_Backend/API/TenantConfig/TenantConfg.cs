@@ -47,6 +47,7 @@ namespace Admin.Controllers
                 
                 programs=metadata.AcademicPrograms,
                 departments=metadata.AcademicDepartments,
+                designations=metadata.AcademicDesignations
             };
             return Ok(response);
         }

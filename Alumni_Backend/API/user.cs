@@ -62,13 +62,13 @@ namespace Admin.Controllers
             }
 
             
-                int createdId= await _userDirectory.CreateUser(newUser);
+                 await _userDirectory.CreateUser(newUser);
                 var response = new 
                 {
                     Status = "Success",
                     Message = "User successfully created.",
-                    UserId = createdId,
-                    accessUrl=$"/api/Admin/users/{newUser.Individual_Institution_ID}"
+                    
+                    accessUrl=$"/api/Admin/users/{newUser.Institution_ID}"
                 };
 
                 return Ok(response);

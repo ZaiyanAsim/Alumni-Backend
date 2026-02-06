@@ -16,7 +16,7 @@ namespace Alumni_Portal.Infrastructure.Data_Models
         public string? Client_Reference_Key { get; init; }
         public int? Campus_ID { get; init; }
         public string? Campus_Reference_Key { get; init; }
-        public int? Individual_Type_Id { get; init; }
+        public int? Individual_Type_ID { get; init; }
         public required string Individual_Type_Value { get; init; }
 
 
@@ -65,7 +65,7 @@ namespace Alumni_Portal.Infrastructure.Data_Models
         public string? Individual_Academic_Department_Value { get; set; }
 
 
-        public int Individual_Academic_Designation_ID { get;  }
+        public int? Individual_Academic_Designation_ID { get; set; }
         public string? Individual_Academic_Designation { get; set; }
 
         public int? Progress_ID { get; set; }

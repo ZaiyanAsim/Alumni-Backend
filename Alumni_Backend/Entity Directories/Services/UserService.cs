@@ -56,12 +56,20 @@ namespace Entity_Directories.Services
         }
         
 
-        public async Task<int> CreateUser(NewUserDTO newUser)
+        public async Task CreateUser(NewUserDTO newUser)
         {
+            int id = await _sharedRepo.Individual_Exists_Async(newUser.Institution_ID);
 
-            int id = await _userRepo.Create(newUser);
+            if (id != 0)
+            {
+                throw new ValidationException("Individual with this ID already exists");
+            }
+            
+             await _userRepo.Create(newUser);
 
-            return id;
+            return;
+
+            
         }
 
 
