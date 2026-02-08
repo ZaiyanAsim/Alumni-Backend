@@ -28,11 +28,18 @@ namespace Admin.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(string id)
         {
-            var response = await _userDirectory.GetUser(id);
-            if (response == null)
+            var user = await _userDirectory.GetUser(id);
+            if (user == null)
             {
                 return NotFound(new {message="No user found with this Institution ID"});
             }
+
+            var response = new
+            {
+                data = user
+            };
+
+
             return Ok(response);
         }
 

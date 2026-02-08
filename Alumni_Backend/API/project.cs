@@ -34,7 +34,12 @@ namespace Admin.Controllers
             {
                 return BadRequest(new { message = "Project Academic ID is null or empty" });
             }
-            var response = await _handler.GetProject(id);
+            var project = await _handler.GetProject(id);
+
+            var response = new
+            {
+                data = project
+            };
             return Ok(response);
         }
 
