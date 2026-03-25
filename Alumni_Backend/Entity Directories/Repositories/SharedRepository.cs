@@ -26,7 +26,7 @@ namespace Alumni_Portal.Entity_Directories.Repositories
                  .Select(i => i.Individual_ID).FirstOrDefaultAsync();
 
             return Individual_ID;
-            
+
 
 
 
@@ -38,18 +38,18 @@ namespace Alumni_Portal.Entity_Directories.Repositories
                 await _projectContext.Projects.
                 Where(p => p.Project_Academic_ID == projectAcademicID)
                 .Select(p => p.Project_ID).FirstOrDefaultAsync();
-            
+
 
             return projectId;
         }
 
-        public async Task Individual_Has_ProjectAsync(string individualInstitutionID,int individualID,int projectID)
+        public async Task Individual_Has_ProjectAsync(string individualInstitutionID, int individualID, int projectID)
         {
             var type = await _individualContext.Individuals.
                 Where(i => i.Individual_ID == individualID).
                 Select(i => i.Individual_Type_Value).FirstAsync();
 
-            
+
 
             int hasProject =
                 await _projectContext.Project_Individuals
@@ -63,12 +63,12 @@ namespace Alumni_Portal.Entity_Directories.Repositories
 
                 throw new ValidationException($"Student with ID ${individualInstitutionID} is already associated with a project.");
             }
-            if ( hasProject == projectID)
+            if (hasProject == projectID)
             {
                 throw new ValidationException($"Individual with id ${individualInstitutionID}  is already associated with this project.");
 
             }
-            
+
 
 
             //bool hasProject =
@@ -110,5 +110,40 @@ namespace Alumni_Portal.Entity_Directories.Repositories
             return await query.CountAsync();
 
         }
+
+        public IQueryable<MentionDTO> MentionsProject(string searchterm)
+        {
+            var projects = _projectContext.Projects
+                .Where(p =>
+                    (p.Project_Name != null && p.Project_Name.Contains(searchterm)) ||
+                    (p.Project_Academic_ID != null && p.Project_Academic_ID.Contains(searchterm)))
+                .Select(p => new MentionDTO
+                {
+                    Id = p.Project_Academic_ID,
+                    Name = p.Project_Name,
+                    Type = "project"
+                });
+
+            return projects;
+        }
+
+
+
+        public IQueryable<MentionDTO> MentionsIndividual(string searchterm)
+        {
+            var individuals = _individualContext.Individuals
+                .Where(i =>
+                    (i.Individual_Name != null && i.Individual_Name.Contains(searchterm)) ||
+                    (i.Individual_Institution_ID != null && i.Individual_Institution_ID.Contains(searchterm)))
+                .Select(i => new MentionDTO
+                {
+                    Id = i.Individual_Institution_ID,
+                    Name = i.Individual_Name,
+                    Type = "individual"
+                });
+
+            return individuals;
+        }
+
     }
 }

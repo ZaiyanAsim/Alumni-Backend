@@ -1,6 +1,7 @@
 ﻿using Alumni_Portal.Infrastructure.Persistance;
 using Alumni_Portal.TenantConfiguration.Parameter.DTO;
 using Microsoft.EntityFrameworkCore;
+using Alumni_Portal.TenantConfiguration.Data_Models;
 namespace Alumni_Portal.TenantConfiguration.Parameter
 {
     public class IndividualParameters

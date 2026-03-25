@@ -1,5 +1,6 @@
 ﻿using Alumni_Portal.TenantConfiguration.Data_Models;
 using Alumni_Portal.TenantConfiguration.Parameter.DTO;
+
 using Microsoft.EntityFrameworkCore;
 namespace Alumni_Portal.TenantConfiguration.Parameter
 {

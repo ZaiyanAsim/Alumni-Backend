@@ -7,10 +7,12 @@ namespace Alumni_Portal.TenantConfiguration
     {
         private ProjectParameters _projectParameters;
         private IndividualParameters _individualParameters;
-        public ConfigService(ProjectParameters projectParameters, IndividualParameters individualParameters)
+        private PostParameters _postParameters;
+        public ConfigService(ProjectParameters projectParameters, IndividualParameters individualParameters, PostParameters postParameters)
         {
             _projectParameters = projectParameters;
             _individualParameters = individualParameters;
+            _postParameters = postParameters;
         }
 
 
@@ -29,6 +31,11 @@ namespace Alumni_Portal.TenantConfiguration
             var metadata = await _individualParameters.GetSupervisorsAsync();
             return metadata;
         }
+
+        public async Task<PostDirectoryParams> GetPostMetadata()
+        {
+            var metadata=await _postParameters.GetPostDirectoryParameters();
+            return metadata;
+        }
     }
 }
-// Do you really think that you need abstractions

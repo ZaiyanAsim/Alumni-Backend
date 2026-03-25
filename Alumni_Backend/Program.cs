@@ -7,6 +7,7 @@ using Users.Infrastructure;
 using Alumni_Portal.Exceptions;
 using Alumni_Portal.Entity_Directories;
 using Alumni_Portal.TenantConfiguration;
+using Alumni_Portal.FileUploads;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddScoped<ITenantService, TenantService>();
+//builder.Services.AddScoped<FileService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
@@ -71,7 +73,7 @@ app.UseExceptionHandler();
 //app.UseAuthentication();
 //app.UseMiddleware<TenantMiddleware>();
 //app.UseAuthorization();
-
+app.UseStaticFiles();
 
 app.MapControllers();
 

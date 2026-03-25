@@ -68,5 +68,23 @@ namespace Admin.Controllers
             return Ok(response );
 
         }
+
+        [HttpGet("Metadata/posts")]
+
+        public async Task<ActionResult> GetPostMetadata()
+        
+        {
+            var metadata= await _configService.GetPostMetadata();
+
+            var response = new
+            {
+                status = "Success",
+                message = "Metadata for Project Creation Successful",
+                postTypes = metadata.PostTypes,
+                institutionEvents=metadata.InstitutionEvents
+            };
+
+            return Ok(response);
+        }
     }
 }

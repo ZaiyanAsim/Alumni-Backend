@@ -13,6 +13,7 @@ namespace Alumni_Portal.TenantConfiguration
                 ));
             services.AddScoped<ProjectParameters>();
             services.AddScoped<IndividualParameters>();
+            services.AddScoped<PostParameters>();
             services.AddScoped<ConfigService>();
             return services;
         }

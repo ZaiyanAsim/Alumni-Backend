@@ -18,4 +18,16 @@
     <ProjectReference Include="..\Users\Users.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Entity Directories\Public API\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\Hp\Documents\Alumni_Management\Alumni_Backend\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\Hp\Documents\Alumni_Management\Alumni_Backend\.editorconfig" />
+  </ItemGroup>
+
 </Project>

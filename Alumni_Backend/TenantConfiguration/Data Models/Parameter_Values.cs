@@ -17,7 +17,7 @@ namespace Alumni_Portal.TenantConfiguration.Data_Models
         [MaxLength(100)]
         public string Client_Reference_Key { get; set; } = string.Empty;
 
-        public int Parameter_ID { get; set; }
+        public int Parameter_ID { get; init; }
 
         [Required]
         [MaxLength(250)]

@@ -11,4 +11,6 @@ namespace Entity_Directories.Services.DTO
         public List<int?> Types { get; set; } = [];
         public List<int?> Categories { get; set; } = [];
     }
+
+    
 }

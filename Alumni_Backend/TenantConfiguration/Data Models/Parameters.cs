@@ -1,8 +1,14 @@
-﻿namespace Alumni_Portal.TenantConfiguration.Data_Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Alumni_Portal.TenantConfiguration.Data_Models
 {
+    [Table("Parameters", Schema = "dbo")]
     public class Parameters
     {
         
+
+            [Key]     
             public int Parameter_ID { get; init; }
             public int Client_ID { get; init; }
             public string Client_Reference_Key { get; init; } = string.Empty;

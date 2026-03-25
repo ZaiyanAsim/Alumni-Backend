@@ -27,12 +27,20 @@ namespace Alumni_Portal.Entity_Directories
                 configuration.GetConnectionString("DefaultConnection")
             ));
 
+            services.AddDbContext<PostDbContext>(options =>
+            options.UseSqlServer(
+                configuration.GetConnectionString("DefaultConnection")
+            ));
+
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<IPostRepository, PostRepository>();
 
             services.AddScoped<UserService>();
             services.AddScoped<ProjectService>();
+            services.AddScoped<PostService>();
             services.AddScoped<SharedRepository>();
+
             return services;
             }
         }
