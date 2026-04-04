@@ -31,7 +31,7 @@ namespace Alumni_Portal.Exceptions
                     Type = exception.GetType().ToString(),
                     Title = "An unexpected error occured.",
                     Status=StatusCodes.Status500InternalServerError,
-                    Detail = exception.Message,
+                    Detail = exception.InnerException?.Message ?? exception.Message,
                     Instance= httpcontext.Request.Path
                     
                 }

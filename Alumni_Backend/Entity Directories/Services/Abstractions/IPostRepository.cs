@@ -12,7 +12,10 @@ namespace Entity_Directories.Services.Abstractions
 
         public Task<int> CreateAsync(PostCreationDTO postDetails);
 
-        public Task AddMediaAsync (List<Post_Media> media);
+        public Task AddMediaAsync(List<Post_Media> media);
+        public Task<List<Post_Media>> GetMediaByPostIdAsync(int postId);
+
+        public Task<postDirectoryDTO?> GetByIdAsync(int id);
 
     }
 }

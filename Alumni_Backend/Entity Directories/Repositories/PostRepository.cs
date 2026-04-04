@@ -72,6 +72,14 @@ namespace Entity_Directories.Repositories
             }
         }
 
+        public async Task<postDirectoryDTO?> GetByIdAsync(int id)
+        {
+            return await _context.Posts
+                .Where(p => p.Post_ID == id)
+                .Select(PostMappings.PostToDTO())
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<int> CreateAsync(PostCreationDTO postDetails)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
@@ -108,6 +116,13 @@ namespace Entity_Directories.Repositories
 
             await _context.Post_Mentions.AddRangeAsync(postMentions);
             await _context.SaveChangesAsync(); // no try/catch here — let it bubble to CreateAsync
+        }
+
+        public async Task<List<Post_Media>> GetMediaByPostIdAsync(int postId)
+        {
+            return await _context.Post_Media
+                .Where(m => m.Post_Id == postId)
+                .ToListAsync();
         }
 
         public async Task AddMediaAsync(List<Post_Media> media)

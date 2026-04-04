@@ -20,7 +20,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddScoped<ITenantService, TenantService>();
-//builder.Services.AddScoped<FileService>();
+builder.Services.AddScoped<FileService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
