@@ -17,8 +17,8 @@ namespace Alumni_Portal.Infrastrcuture.Data_Models
         [Required]
         public int Individual_ID { get; set; }
 
-        
-        
+        public string Individual_Role { get; set; } = string.Empty;
+
 
 
 

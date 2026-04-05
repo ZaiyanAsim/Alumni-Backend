@@ -31,6 +31,7 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader()
               .AllowAnyMethod());
 });
+builder.Services.AddScoped<FileService>();
 
 
 builder.Services.AddControllers()

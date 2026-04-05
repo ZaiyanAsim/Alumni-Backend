@@ -26,6 +26,14 @@ namespace Alumni_Portal.Infrastructure.Persistence
         public DbSet<Project_Industry> Project_Industry { get; set; }
 
         public DbSet<Project_Individuals> Project_Individuals { get; set; }
+
+        public DbSet<Project_Tech_Stack> Project_Tech_Stack { get; set; }
+
+        public DbSet<Project_Attachments> Project_Attachments { get; set; }
+
+        public DbSet <Project_Results> Project_Results { get; set; }
+
+        public DbSet<Project_Delivarables> Project_Deliverables { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -46,7 +54,7 @@ namespace Alumni_Portal.Infrastructure.Persistence
             .WithMany(p => p.Project_Individuals)
              .HasForeignKey(pi => pi.Project_ID);
 
-
+            
 
 
         }

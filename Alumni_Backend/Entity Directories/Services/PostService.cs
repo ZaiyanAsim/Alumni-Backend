@@ -58,6 +58,12 @@ namespace Entity_Directories.Services
 
         }
 
+        public async Task<postDirectoryDTO?> GetPostById(int id)
+        {
+            return await _postRepo.GetByIdAsync(id);
+        }
+
+
         public async Task<int> CreatePost(PostCreationDTO newPost)
         {
             if (newPost == null)
@@ -71,35 +77,14 @@ namespace Entity_Directories.Services
 
         }
 
-        public async Task AddMedia(List<IFormFile> media, int postId)
+        public async Task<List<Post_Media>> GetMediaByPostId(int postId)
         {
-            //UploadResponseDTO response = await _fileService.UploadMedia(media);
+            return await _postRepo.GetMediaByPostIdAsync(postId);
+        }
 
-            //if (response.errorMessage != null || (response.errors != null && response.errors.Count > 0))
-            //{
-            //    string errors = response.errorMessage ?? string.Join(", ", response.errors);
-            //    throw new ValidationException($"Media upload failed: {errors}");
-            //}
-
-            //if (response.UploadedFiles != null )
-            //{
-            //    List<Post_Media> postMediaList = response.UploadedFiles.Select(file => new Post_Media
-            //    {
-            //        Post_Id=postId,
-            //        Media_Title = file.Media_Title,
-            //        Media_Date = file.Media_Date,
-            //        Media_File_Location = file.Media_File_Location,
-            //        Media_File_Name = file.Media_File_Name,
-                    
-            //    }).ToList();
-
-            //    await _postRepo.AddMediaAsync(postMediaList);
-            //}
-
-
-           
-
-
+        public async Task AddMedia(List<Post_Media> mediaList)
+        {
+            await _postRepo.AddMediaAsync(mediaList);
         }
 
 

@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Folder Include="Entity Directories\Public API\" />
+    <Folder Include="Profiles\Services\Abstractions\" />
   </ItemGroup>
 
   <ItemGroup>

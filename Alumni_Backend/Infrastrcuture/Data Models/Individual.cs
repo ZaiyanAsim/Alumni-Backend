@@ -19,7 +19,7 @@ namespace Alumni_Portal.Infrastructure.Data_Models
         public int? Individual_Type_ID { get; init; }
         public required string Individual_Type_Value { get; init; }
 
-
+        public string? Logo_Url { get; init; }
         public required string Individual_Name { get; init; }
         public string? Individual_Email { get; init; }
         public string? Individual_Contact_Number_Primary { get; init; }

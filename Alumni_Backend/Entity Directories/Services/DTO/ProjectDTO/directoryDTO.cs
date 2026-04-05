@@ -24,5 +24,5 @@ namespace Entity_Directories.Services.DTO
         public bool? Is_Sponsored { get; init; }
 
     }
-
+   
 }

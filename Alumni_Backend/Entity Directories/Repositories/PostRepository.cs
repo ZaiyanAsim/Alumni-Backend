@@ -35,6 +35,13 @@ namespace Entity_Directories.Repositories
             return posts;
         }
 
+        public async Task<postDirectoryDTO?> GetByIdAsync(int id)
+        {
+            return await _context.Posts
+                .Where(p => p.Post_ID == id)
+                .Select(PostMappings.PostToDTO())
+                .FirstOrDefaultAsync();
+        }
         public async Task<List<int>> DeleteBulkAsync(List<int> postIds)
         {
 
@@ -118,7 +125,16 @@ namespace Entity_Directories.Repositories
             await _context.SaveChangesAsync();
 
         }
+
+        public async Task<List<Post_Media>> GetMediaByPostIdAsync(int postId)
+        {
+            return await _context.Post_Media
+                .Where(m => m.Post_Id == postId)
+                .ToListAsync();
+        }
+
        
+
     }
 
 }
