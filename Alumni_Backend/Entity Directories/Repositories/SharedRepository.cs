@@ -111,38 +111,68 @@ namespace Alumni_Portal.Entity_Directories.Repositories
 
         }
 
-        public IQueryable<MentionDTO> MentionsProject(string searchterm)
+        public List<MentionDTO> MentionsProject(string searchterm)
         {
-            var projects = _projectContext.Projects
-                .Where(p =>
-                    (p.Project_Name != null && p.Project_Name.Contains(searchterm)) ||
-                    (p.Project_Academic_ID != null && p.Project_Academic_ID.Contains(searchterm)))
-                .Select(p => new MentionDTO
+            var result = new List<MentionDTO>();
+            var connection = (SqlConnection)_projectContext.Database.GetDbConnection();
+            bool wasOpen = connection.State == System.Data.ConnectionState.Open;
+            if (!wasOpen) connection.Open();
+            try
+            {
+                using var cmd = new SqlCommand(@"
+                    SELECT TOP 10 Project_ID, Project_Name
+                    FROM Projects
+                    WHERE Client_ID = 1 AND Campus_ID = 1
+                      AND (Project_Name LIKE @pattern OR Project_Academic_ID LIKE @pattern)", connection);
+                cmd.Parameters.AddWithValue("@pattern", $"%{searchterm}%");
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
                 {
-                    Id = p.Project_Academic_ID,
-                    Name = p.Project_Name,
-                    Type = "project"
-                });
-
-            return projects;
+                    result.Add(new MentionDTO
+                    {
+                        Id = reader.GetInt32(0),
+                        Name = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
+                        Type = "project"
+                    });
+                }
+            }
+            finally
+            {
+                if (!wasOpen) connection.Close();
+            }
+            return result;
         }
 
-
-
-        public IQueryable<MentionDTO> MentionsIndividual(string searchterm)
+        public List<MentionDTO> MentionsIndividual(string searchterm)
         {
-            return _individualContext.Individuals
-                .Where(i =>
-                    EF.Functions.Like(i.Individual_Name ?? "", $"%{searchterm}%") ||
-                    EF.Functions.Like(i.Individual_Institution_ID ?? "", $"%{searchterm}%")
-                )
-                .Select(i => new MentionDTO
+            var result = new List<MentionDTO>();
+            var connection = (SqlConnection)_individualContext.Database.GetDbConnection();
+            bool wasOpen = connection.State == System.Data.ConnectionState.Open;
+            if (!wasOpen) connection.Open();
+            try
+            {
+                using var cmd = new SqlCommand(@"
+                    SELECT TOP 10 Individual_ID, Individual_Name
+                    FROM Individuals
+                    WHERE Client_ID = 1 AND Campus_ID = 1
+                      AND (Individual_Name LIKE @pattern OR Individual_Institution_ID LIKE @pattern)", connection);
+                cmd.Parameters.AddWithValue("@pattern", $"%{searchterm}%");
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
                 {
-                    Id = i.Individual_Institution_ID,
-                    Name = i.Individual_Name,
-                    Type = "individual"
-                }); 
-                
+                    result.Add(new MentionDTO
+                    {
+                        Id = reader.GetInt32(0),
+                        Name = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
+                        Type = "individual"
+                    });
+                }
+            }
+            finally
+            {
+                if (!wasOpen) connection.Close();
+            }
+            return result;
         }
 
 

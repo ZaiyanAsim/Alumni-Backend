@@ -96,35 +96,19 @@ namespace Entity_Directories.Services
 
         }
 
-        public async Task<MentionsResultDTO> PostMentions( string searchTerm, string type)
+        public Task<MentionsResultDTO> PostMentions(string searchTerm, string type)
         {
-            var individualQuery = _sharedRepo.MentionsIndividual(searchTerm).Take(10);
-            var projectQuery = _sharedRepo.MentionsProject(searchTerm).Take(10);
-            switch (type)
+            var individuals = _sharedRepo.MentionsIndividual(searchTerm).Take(10).ToList();
+            var projects    = _sharedRepo.MentionsProject(searchTerm).Take(10).ToList();
+
+            MentionsResultDTO result = type switch
             {
-                case "individual":
-                    var individualMentions = await individualQuery.ToListAsync();
-                    return new MentionsResultDTO
-                    {
-                        IndividualMentions = individualMentions,
-                       
-                    };
-                case "project":
-                    var projectMentions = await projectQuery.ToListAsync();
-                    return new MentionsResultDTO
-                    {
-                        
-                        ProjectMentions = projectMentions
-                    };
-                default:
-                    var individualMentionsBoth = await individualQuery.ToListAsync();
-                    var projectMentionsBoth = await projectQuery.ToListAsync();
-                    return new MentionsResultDTO
-                    {
-                        IndividualMentions = individualMentionsBoth,
-                        ProjectMentions = projectMentionsBoth
-                    };
-                            }
+                "individual" => new MentionsResultDTO { IndividualMentions = individuals },
+                "project"    => new MentionsResultDTO { ProjectMentions    = projects    },
+                _            => new MentionsResultDTO { IndividualMentions = individuals, ProjectMentions = projects }
+            };
+
+            return Task.FromResult(result);
         }
 
     }

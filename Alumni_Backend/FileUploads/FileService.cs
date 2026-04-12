@@ -18,7 +18,7 @@ namespace Alumni_Portal.FileUploads
         {
             var webRoot = env.WebRootPath ?? Path.Combine(env.ContentRootPath, "wwwroot");
             _mediaRootPath = Path.Combine(webRoot, "uploads");
-            
+            Directory.CreateDirectory(_mediaRootPath);
         }
 
         public async Task<UploadResponseDTO> UploadMedia(List<IFormFile> media)
@@ -109,7 +109,7 @@ namespace Alumni_Portal.FileUploads
                 ".webp" => header[0] == 0x52 && header[1] == 0x49 && header[2] == 0x46 && header[3] == 0x46,
                 ".mp4" or ".mov" => header[4] == 0x66 && header[5] == 0x74 && header[6] == 0x79 && header[7] == 0x70,
                 ".avi" => header[0] == 0x52 && header[1] == 0x49 && header[2] == 0x46 && header[3] == 0x46,
-                ".webm" => header[0] == 0x1A && header[1] == 0x45 && header[2] == 0xDF && header[3] == 0xA3,
+                ".webm" or ".mkv" => header[0] == 0x1A && header[1] == 0x45 && header[2] == 0xDF && header[3] == 0xA3,
                 _ => false
             };
         }

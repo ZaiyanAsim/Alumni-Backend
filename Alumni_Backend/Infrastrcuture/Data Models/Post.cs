@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 
 
@@ -82,13 +83,14 @@ namespace Alumni_Portal.Infrastructure.Data_Models
 
         public required int Post_Id { get; set; }
 
-        public required string Mention_Id { get; set; }
+        public required int Mention_Id { get; set; }
 
         public required string Mention_Name { get; set; }
 
         public required string Mention_Type { get; set; }
     }
 
+    [Table("Post_Attachments")]
     public class Post_Attachment
     {
         [Key]
@@ -129,7 +131,7 @@ namespace Alumni_Portal.Infrastructure.Data_Models
             public int Created_By_Id { get; set; }             // Created_By_ID
             public string Created_By_Name { get; set; }        // Created_By_Name
             public DateTime Created_Date { get; set; }        // Created_Date
-            public int? UpdatedBy_Id { get; set; }            // Updated_By_ID
+            public int? Updated_By_Id { get; set; }            // Updated_By_ID
             public string? Updated_By_Name { get; set; }       // Updated_By_Name
             public DateTime? Updated_Date { get; set; }       // Updated_Date
         }
