@@ -18,7 +18,8 @@ namespace Alumni_Portal.FileUploads
         {
             var webRoot = env.WebRootPath ?? Path.Combine(env.ContentRootPath, "wwwroot");
             _mediaRootPath = Path.Combine(webRoot, "uploads");
-            Directory.CreateDirectory(_mediaRootPath);
+            if (!Directory.Exists(_mediaRootPath))
+                Directory.CreateDirectory(_mediaRootPath);
         }
 
         public async Task<UploadResponseDTO> UploadMedia(List<IFormFile> media)

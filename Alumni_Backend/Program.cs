@@ -33,6 +33,8 @@ builder.Services.AddCors(options =>
         
 });
 builder.Services.AddScoped<FileService>();
+builder.Services.AddScoped<Alumni_Portal.Profiles.Repositories.ProjectReadRepo>();
+builder.Services.AddScoped<Alumni_Portal.Profiles.Services.ProjectProfileService>();
 
 
 builder.Services.AddControllers()

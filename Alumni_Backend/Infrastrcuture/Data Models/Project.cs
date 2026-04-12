@@ -35,9 +35,9 @@ public class Projects
     [MaxLength(100)]
     public string Project_Type_Value { get; set; } = string.Empty;
 
-    public string Logo_Url { get; init; }
+    public string? Logo_Url { get; init; }
 
-    public string Video_Url { get; init; }
+    public string? Video_Url { get; init; }
     [Required]
     [MaxLength(100)]
     public string Project_Name { get; set; } = string.Empty;
@@ -46,11 +46,11 @@ public class Projects
     public int Project_Year { get; set; }
 
     [MaxLength(200)]
-    public string Project_Industries { get; set; }
+    public string? Project_Industries { get; set; }
 
 
     [MaxLength(500)]
-    public string Project_Description { get; set; }
+    public string? Project_Description { get; set; }
     public bool? Is_Mentored { get; set; } = false;
 
     public bool? Is_Sponsored { get; set; } = false;
@@ -117,7 +117,7 @@ public class Project_Attachments
     [MaxLength(250)]
     public string? Attachment_File_Name { get; set; }
 
-    public long Attachment_Size { get; set; }
+    public long? Attachment_Size { get; set; }
 
     [Column("Progress_ID")]
     public int Progress_ID { get; set; }
@@ -176,7 +176,7 @@ public class Project_Results
 
     public string? Result_Image_Url { get; set; }
 
-    public int Result_Seq_Number { get; set; }
+    public int? Result_Seq_Number { get; set; }
     public string? Result_Metric_Value { get; set; }
     public string? Result_Metric_Label { get; set; }
 
@@ -204,7 +204,7 @@ public class Project_Delivarables
 
 
     public required string Deliverable_Title { get; set; }
-    public string? Deliverables_Description { get; set; }
+    public string? Deliverable_Description { get; set; }
 
     public required int Deliverable_Status_ID { get; set; }
     public required string Deliverable_Status_Value { get; set; }

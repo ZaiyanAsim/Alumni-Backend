@@ -33,6 +33,9 @@ namespace Alumni_Portal.Profiles.Repositories
                     Video_Url = p.Video_Url,
                     Project_Year = p.Project_Year,
                     Project_Category = p.Project_Industries,
+                    Project_Description = p.Project_Description,
+                    Is_Mentored = p.Is_Mentored,
+                    Is_Sponsored = p.Is_Sponsored,
                 })
                 .FirstOrDefaultAsync(ct);
         }
@@ -77,21 +80,31 @@ namespace Alumni_Portal.Profiles.Repositories
 
         public async Task<List<ProjectDocumentDto>> GetDocuments(int projectId)
         {
-            return await _projectDbContext.Project_Attachments
+            var rows = await _projectDbContext.Project_Attachments
                 .AsNoTracking()
                 .Where(a => a.Project_ID == projectId)
                 .OrderByDescending(a => a.Attachment_Date)
-                .Select(a => new ProjectDocumentDto
+                .Select(a => new
                 {
-                    AttachmentId = a.Project_Attachment_ID,
-                    Title = a.Attachment_Title,
-                    Description = a.Attachment_Description!,
-                    FileName = a.Attachment_File_Name!,
-                    FileUrl = a.Attachment_File_Location!,
-                    FileType = Path.GetExtension(a.Attachment_File_Name)!,
-                    FileSize = a.Attachment_Size!,
+                    a.Project_Attachment_ID,
+                    a.Attachment_Title,
+                    a.Attachment_Description,
+                    a.Attachment_File_Location,
+                    a.Attachment_File_Name,
+                    a.Attachment_Size,
                 })
                 .ToListAsync();
+
+            return rows.Select(a => new ProjectDocumentDto
+            {
+                AttachmentId = a.Project_Attachment_ID,
+                Title = a.Attachment_Title,
+                Description = a.Attachment_Description ?? "",
+                FileName = a.Attachment_File_Name ?? "",
+                FileUrl = a.Attachment_File_Location ?? "",
+                FileType = Path.GetExtension(a.Attachment_File_Name ?? "").TrimStart('.').ToUpperInvariant(),
+                FileSize = a.Attachment_Size ?? 0,
+            }).ToList();
         }
 
         public async Task<List<ProjectResultsDTO>> GetResultsDTOs(int projectId)
@@ -102,7 +115,7 @@ namespace Alumni_Portal.Profiles.Repositories
                 .OrderByDescending(r => r.Result_Seq_Number)
                 .Select(r => new ProjectResultsDTO
                 {
-                    Seq_Number = r.Result_Seq_Number,
+                    Seq_Number = r.Result_Seq_Number ?? 0,
                     Title = r.Result_Title,
                     Description = r.Result_Description!,
                     Type_Value = r.Result_Type_Value!,
@@ -111,6 +124,19 @@ namespace Alumni_Portal.Profiles.Repositories
                     Link = r.Result_Link!,
                     Tags = r.Result_Tags!,
                     Image_Url = r.Result_Image_Url!,
+                })
+                .ToListAsync();
+        }
+
+        public async Task<List<TechStackDTO>> GetTechStackAsync(int projectId)
+        {
+            return await _projectDbContext.Project_Tech_Stack
+                .AsNoTracking()
+                .Where(t => t.Project_ID == projectId)
+                .Select(t => new TechStackDTO
+                {
+                    Layer = t.Layer_Value,
+                    Technology = t.Technology_Value,
                 })
                 .ToListAsync();
         }
@@ -124,7 +150,7 @@ namespace Alumni_Portal.Profiles.Repositories
                 .Select(d => new ProjectDeliverablesDTO
                 {
                     Title = d.Deliverable_Title,
-                    Description = d.Deliverables_Description!,
+                    Description = d.Deliverable_Description ?? "",
                     Status_Value = d.Deliverable_Status_Value!,
                     Category_Value = d.Deliverable_Category_Value!,
                     Date = d.Date

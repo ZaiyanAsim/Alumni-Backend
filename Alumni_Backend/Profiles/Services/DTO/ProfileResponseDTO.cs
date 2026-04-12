@@ -17,7 +17,14 @@ namespace Alumni_Portal.Profiles.DTO
 
         public List<ProjectDeliverablesDTO>? Deliverables { get; set; }=new List<ProjectDeliverablesDTO>();
 
+        public List<TechStackDTO>? TechStack { get; set; } = new List<TechStackDTO>();
 
+    }
+
+    public class TechStackDTO
+    {
+        public string? Layer { get; set; }
+        public string Technology { get; set; } = string.Empty;
     }
 
 

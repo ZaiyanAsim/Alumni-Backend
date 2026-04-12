@@ -45,30 +45,30 @@ namespace Alumni_Portal.Profiles.Services
             => _repo.GetDeliverablesDTOs(projectId);
 
       
+        public Task<List<TechStackDTO>> GetTechStackAsync(
+            int projectId,
+            CancellationToken ct = default)
+            => _repo.GetTechStackAsync(projectId);
+
         public async Task<ProjectProfileResponseDTO> GetFullProfileAsync(
             int projectId,
             CancellationToken ct = default)
         {
-            var headerTask = GetHeaderAsync(projectId, ct);
-            var membersTask = GetMembersAsync(projectId, ct);
-            var documentsTask = GetDocumentsAsync(projectId, ct);
-            var resultsTask = GetResultsAsync(projectId, ct);
-            var deliverablesTask = GetDeliverablesAsync(projectId, ct);
-
-            await Task.WhenAll(
-                headerTask,
-                membersTask,
-                documentsTask,
-                resultsTask,
-                deliverablesTask);
+            var header       = await GetHeaderAsync(projectId, ct);
+            var members      = await GetMembersAsync(projectId, ct);
+            var documents    = await GetDocumentsAsync(projectId, ct);
+            var results      = await GetResultsAsync(projectId, ct);
+            var deliverables = await GetDeliverablesAsync(projectId, ct);
+            var techStack    = await GetTechStackAsync(projectId, ct);
 
             return new ProjectProfileResponseDTO
             {
-                Header_Data =  headerTask.Result,
-                Members =  membersTask.Result ,
-                Documents = documentsTask.Result,
-                Results =  resultsTask.Result,
-                Deliverables =  deliverablesTask.Result,
+                Header_Data  = header,
+                Members      = members,
+                Documents    = documents,
+                Results      = results,
+                Deliverables = deliverables,
+                TechStack    = techStack,
             };
         }
     }
