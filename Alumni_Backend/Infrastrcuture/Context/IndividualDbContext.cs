@@ -19,6 +19,8 @@ namespace Alumni_Portal.Infrastructure.Persistance
         public DbSet<Individuals> Individuals { get; set; }
         public DbSet<Individual_Academics> Individual_Academics { get; set; }
 
+        public DbSet<Individual_Work_Experience> Individual_Work_Experience { get; set; }   
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -32,7 +34,13 @@ namespace Alumni_Portal.Infrastructure.Persistance
                  .HasForeignKey(ia => ia.Individual_ID)
                  .HasPrincipalKey(i => i.Individual_ID)
                  .OnDelete(DeleteBehavior.Cascade);
-
+            
+            modelBuilder.Entity<Individual_Work_Experience>()
+                 .HasOne<Individuals>()
+                 .WithMany()
+                 .HasForeignKey(iwe => iwe.Individual_ID)
+                 .HasPrincipalKey(i => i.Individual_ID)
+                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

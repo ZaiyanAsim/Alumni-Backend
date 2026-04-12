@@ -36,7 +36,7 @@ namespace Alumni_Portal.Profiles.Repositories
                 })
                 .FirstOrDefaultAsync(ct);
         }
-        public async Task<IReadOnlyList<MemberDTO>> GetMembers(int projectId, CancellationToken ct = default)
+        public async Task<List<MemberDTO>> GetMembers(int projectId, CancellationToken ct = default)
         {
 
             var projectMembers = await _projectDbContext.Project_Individuals
@@ -46,7 +46,7 @@ namespace Alumni_Portal.Profiles.Repositories
                 .ToListAsync(ct);
 
             if (!projectMembers.Any())
-                return Array.Empty<MemberDTO>();
+                return new List<MemberDTO>();
 
 
             var individualIds = projectMembers.Select(pm => pm.Individual_ID).ToList();

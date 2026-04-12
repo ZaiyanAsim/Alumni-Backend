@@ -131,19 +131,20 @@ namespace Alumni_Portal.Entity_Directories.Repositories
 
         public IQueryable<MentionDTO> MentionsIndividual(string searchterm)
         {
-            var individuals = _individualContext.Individuals
+            return _individualContext.Individuals
                 .Where(i =>
-                    (i.Individual_Name != null && i.Individual_Name.Contains(searchterm)) ||
-                    (i.Individual_Institution_ID != null && i.Individual_Institution_ID.Contains(searchterm)))
+                    EF.Functions.Like(i.Individual_Name ?? "", $"%{searchterm}%") ||
+                    EF.Functions.Like(i.Individual_Institution_ID ?? "", $"%{searchterm}%")
+                )
                 .Select(i => new MentionDTO
                 {
                     Id = i.Individual_Institution_ID,
                     Name = i.Individual_Name,
                     Type = "individual"
-                });
-
-            return individuals;
+                }); 
+                
         }
+
 
     }
 }

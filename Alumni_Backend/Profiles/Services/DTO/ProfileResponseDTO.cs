@@ -5,18 +5,19 @@ using System.Numerics;
 
 namespace Alumni_Portal.Profiles.DTO
 {
-    public class ProfileResponseDTO
+    public class ProjectProfileResponseDTO
     {
         
         public  MetaDataDTO Header_Data  { get; set; }
-        public List<MemberDTO> Members { get; set; } =new List<MemberDTO>();
+        public List<MemberDTO>? Members { get; set; } =new List<MemberDTO>();
 
-        
-        public List<DocumentDTO> Documents { get; set; }=new List<DocumentDTO>();
+        public List<ProjectDocumentDto>? Documents { get; set; }=new List<ProjectDocumentDto>();
 
-      
+        public List<ProjectResultsDTO>? Results { get; set; }=new List<ProjectResultsDTO>();
 
-        
+        public List<ProjectDeliverablesDTO>? Deliverables { get; set; }=new List<ProjectDeliverablesDTO>();
+
+
     }
 
 
@@ -66,7 +67,7 @@ namespace Alumni_Portal.Profiles.DTO
     public class MetaDataDTO {
 
         public int Project_ID { get; init; }
-        public required string Project_Academic_ID { get; set; }
+        public required string Project_Academic_ID { get; init; }
         public required string Project_Name { get; init; }
 
         public string? Project_Description { get; init; }

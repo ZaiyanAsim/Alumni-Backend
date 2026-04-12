@@ -76,4 +76,37 @@ namespace Alumni_Portal.Infrastructure.Data_Models
 
 
     }
+
+  
+
+public class Individual_Work_Experience
+    {
+        [Key]
+        public int Individual_Work_Experience_ID { get; set; }
+
+        public int Individual_ID { get; set; }
+
+        public string? Individual_Work_Experience_Company_Name { get; set; }
+
+        public string? Individual_Work_Experience_Job_Title { get; set; }
+
+        public string? Individual_Work_Experience_Department { get; set; }
+
+        public string? Individual_Work_Experience_Industry { get; set; }
+
+        public string? Individual_Work_Experience_Employment_Type { get; set; }
+
+        public DateTime? Individual_Work_Experience_Start_Date { get; set; }
+
+        public DateTime? Individual_Work_Experience_End_Date { get; set; }
+
+        public bool? Individual_Work_Experience_Is_Current { get; set; }
+
+        public string? Individual_Work_Experience_Location { get; set; }
+
+        public string? Individual_Work_Experience_Description { get; set; }
+
+        public string? Individual_Work_Experience_Skills { get; set; } 
+    }
+
 }
