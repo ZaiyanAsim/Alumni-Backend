@@ -4,7 +4,7 @@
 
     public class PostMediaDTO
     {
-        public int Post_Media_Id { get; set; }
+        public int Post_Media_ID { get; set; }
         public string Media_Title { get; set; } = null!;
         public string? Media_Description { get; set; }
         public string? Media_File_Location { get; set; }
@@ -29,7 +29,7 @@
 
     public class PostMentionsDTO
     {
-        public required int Mention_Id { get; set; }
+        public required int Mention_ID { get; set; }
         public string Mention_Type { get; set; } = null!;
         public string Mention_Name { get; set; } = null!;
     }

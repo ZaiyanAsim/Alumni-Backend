@@ -107,8 +107,8 @@ namespace Entity_Directories.Repositories
 
             var postMentions = mentions.Select(mention => new Post_Mentions
             {
-                Post_Id = post_ID,
-                Mention_Id = mention.Mention_Id,
+                Post_ID = post_ID,
+                Mention_ID = mention.Mention_ID,
                 Mention_Type = mention.Mention_Type,
                 Mention_Name = mention.Mention_Name
             }).ToList();
@@ -129,7 +129,7 @@ namespace Entity_Directories.Repositories
         public async Task<List<Post_Media>> GetMediaByPostIdAsync(int postId)
         {
             return await _context.Post_Media
-                .Where(m => m.Post_Id == postId)
+                .Where(m => m.Post_ID == postId)
                 .ToListAsync();
         }
 

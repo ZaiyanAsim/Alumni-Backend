@@ -79,11 +79,11 @@ namespace Alumni_Portal.Infrastructure.Data_Models
     public class Post_Mentions
     {
         [Key]
-        public int Post_Mention_Id { get; set; }
+        public int Post_Mention_ID { get; set; }
 
-        public required int Post_Id { get; set; }
+        public required int Post_ID { get; set; }
 
-        public required int Mention_Id { get; set; }
+        public required int Mention_ID { get; set; }
 
         public required string Mention_Name { get; set; }
 
@@ -117,21 +117,21 @@ namespace Alumni_Portal.Infrastructure.Data_Models
         public class Post_Media
         {
             [Key]
-            public int Post_Media_Id { get; set; }             // Post_Media_ID
-            public int Post_Id { get; set; }                  // Post_ID
+            public int Post_Media_ID { get; set; }             // Post_Media_ID
+            public int Post_ID { get; set; }                  // Post_ID
             public DateTime Media_Date { get; set; }          // Media_Date
             public string Media_Title { get; set; }           // Media_Title
             public string? Media_Description { get; set; }    // Media_Description
             public string? Media_File_Location { get; set; }   // Media_File_Location
             public string? Media_File_Name { get; set; }       // Media_File_Name
-            public int Progress_Id { get; set; }              // Progress_ID
+            public int Progress_ID { get; set; }              // Progress_ID
             public string Progress_Value { get; set; }        // Progress_Value
-            public int Status_Id { get; set; }                // Status_ID
+            public int Status_ID { get; set; }                // Status_ID
             public string Status_Value { get; set; }          // Status_Value
-            public int Created_By_Id { get; set; }             // Created_By_ID
+            public int Created_By_ID { get; set; }             // Created_By_ID
             public string Created_By_Name { get; set; }        // Created_By_Name
             public DateTime Created_Date { get; set; }        // Created_Date
-            public int? Updated_By_Id { get; set; }            // Updated_By_ID
+            public int? Updated_By_ID { get; set; }            // Updated_By_ID
             public string? Updated_By_Name { get; set; }       // Updated_By_Name
             public DateTime? Updated_Date { get; set; }       // Updated_Date
         }

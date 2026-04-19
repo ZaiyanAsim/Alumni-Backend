@@ -25,7 +25,7 @@ namespace Entity_Directories.Services.DTO
 
     public class PostMentionsDTO
     {
-        public required int Mention_Id { get; set; }
+        public required int Mention_ID{ get; set; }
 
         public string Mention_Type { get; set; } = null!;
 
