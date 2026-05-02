@@ -42,8 +42,15 @@ namespace Alumni_Portal.OpenPortalPages.MainPage.Services
             };
         }
       
+        public async Task<List<BannerPostDTO>> GetBannerPostsAsync(bool takeLimit, List<int>? postTypeIds)
+        {
+            var result = await _repo.GetBannerPostsAsync(takeLimit, postTypeIds);
+            return result;
+        }
+                
+            
 
-    }
+        }
 }
 
 

@@ -27,16 +27,25 @@ namespace Alumni_Portal.OpenPortalPages.ProjectListing.Repository
                 .AsNoTracking();
                 
 
-            if (query.AvailableForSponsorship == true)
-                q = q.Where(p => p.Is_Sponsorship_Available);
+            if (query.SeekingSponsors == true)
+                q = q.Where(p => p.Is_Sponsorship_Available==true && p.Is_Sponsored==false);
 
-            if (query.AvailableForMentorship == true)
-                q = q.Where(p => p.Is_Mentorship_Available);
+            if (query.SeekingMentors == true)
+                q = q.Where(p => p.Is_Mentorship_Available==true && p.Is_Mentored==false);
+           
+            if (query.ProjectTypeIds is { Count: > 0 })
+            {
+                var projectTypeIds = _context.Projects
+                    .Where(i => query.ProjectTypeIds.Contains(i.Project_Type_ID!.Value))
+                    .Select(i => i.Project_ID);
 
-            if (query.IndustryParameterIds is { Count: > 0 })
+                q = q.Where(p => projectTypeIds.Contains(p.Project_ID));
+            }
+            
+            if (query.ProjectIndustryIds is { Count: > 0 })
             {
                 var projectIdsInIndustry = _context.Project_Industry
-                    .Where(i => query.IndustryParameterIds.Contains(i.Project_Industry_Parameter_ID!.Value))
+                    .Where(i => query.ProjectIndustryIds.Contains(i.Project_Industry_Parameter_ID!.Value))
                     .Select(i => i.Project_ID);
 
                 q = q.Where(p => projectIdsInIndustry.Contains(p.Project_ID));

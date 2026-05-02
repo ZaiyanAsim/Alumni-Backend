@@ -27,11 +27,9 @@ namespace Alumni_Portal.API.OpenPortal
 
             var result = await _feedService.GetProjectFeedAsync(query, ct);
 
-            if (!result.Projects.Any())
-                return NoContent();
 
             return Ok(result);
         }
-
+        
     }
 }

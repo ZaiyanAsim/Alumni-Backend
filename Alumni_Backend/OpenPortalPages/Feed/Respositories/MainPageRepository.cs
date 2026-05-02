@@ -1,37 +1,40 @@
 ﻿using Alumni_Portal.Infrastructure.Persistance;
+using Alumni_Portal.Infrastructure.Data_Models;
 using Alumni_Portal.OpenPortalPages.MainPage.Services.DTO;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions;
 namespace Alumni_Portal.OpenPortalPages.MainPage.Respositories
 {
     public class FeedPageRepository
     {
         private readonly PostDbContext _context;
+        private readonly SharedDbContext _sharedContext;
 
-        public FeedPageRepository(PostDbContext context)
+        public FeedPageRepository(PostDbContext context, SharedDbContext sharedContext)
         {
             _context = context;
+            _sharedContext = sharedContext;
         }
 
         public async Task<(List<PostFeedItemDTO> Posts, bool HasMore)> GetFeedAsync(
-            int? postTypeId,
+            List<int>? postTypeId,
             DateTime? cursorDate,
             int cursorPostId,
             int pageSize,
             CancellationToken ct = default)
         {
-            // Fetch one extra row to know whether a next page exists
+         
             int fetchCount = pageSize + 1;
 
             var query = _context.Posts
                 .AsNoTracking()
                 .Where(p => p.Published_Date < DateTime.UtcNow);
 
-            // ── Type filter ───────────────────────────────────────────────────────
-            if (postTypeId.HasValue)
-                query = query.Where(p => p.Post_Type_ID == postTypeId.Value);
+     
+            if (postTypeId != null && postTypeId.Count > 0)
+                query = query.Where(p => p.Post_Type_ID.HasValue && postTypeId.Contains(p.Post_Type_ID.Value) && p.Visible_In_Feed == true);
 
-            // ── Keyset cursor ─────────────────────────────────────────────────────
+       
             if (cursorDate.HasValue)
             {
                 query = query.Where(p =>
@@ -39,7 +42,7 @@ namespace Alumni_Portal.OpenPortalPages.MainPage.Respositories
                     (p.Published_Date == cursorDate.Value && p.Post_ID < cursorPostId));
             }
 
-            // ── Sort + limit ──────────────────────────────────────────────────────
+       
             var rawPosts = await query
                 .OrderByDescending(p => p.Published_Date)
                 .ThenByDescending(p => p.Post_ID)
@@ -50,7 +53,7 @@ namespace Alumni_Portal.OpenPortalPages.MainPage.Respositories
                     p.Post_Type_Value,
                     p.Post_Title,
                     p.Post_Tags,
-                    p.Post_Content,
+                    p.Post_Content, 
                     p.Published_Date,
                 })
                 .ToListAsync(ct);
@@ -63,7 +66,7 @@ namespace Alumni_Portal.OpenPortalPages.MainPage.Respositories
 
             var postIds = pagePosts.Select(p => p.Post_ID).ToList();
 
-            // ── Mentions for this page only ───────────────────────────────────────
+      
             var mentions = await _context.Post_Mentions
                 .AsNoTracking()
                 .Where(m => postIds.Contains(m.Post_ID))
@@ -79,7 +82,7 @@ namespace Alumni_Portal.OpenPortalPages.MainPage.Respositories
                 })
                 .ToListAsync(ct);
 
-            // ── Media for this page only ──────────────────────────────────────────
+        
             var media = await _context.Post_Media
                 .AsNoTracking()
                 .Where(m => postIds.Contains(m.Post_ID))
@@ -97,7 +100,7 @@ namespace Alumni_Portal.OpenPortalPages.MainPage.Respositories
                 })
                 .ToListAsync(ct);
 
-            // ── Group in memory by Post_ID (O(1) lookups) ─────────────────────────
+      
             var mentionsByPost = mentions
                 .GroupBy(x => x.Post_ID)
                 .ToDictionary(g => g.Key, g => g.Select(x => x.Dto).ToList());
@@ -106,7 +109,7 @@ namespace Alumni_Portal.OpenPortalPages.MainPage.Respositories
                 .GroupBy(x => x.Post_ID)
                 .ToDictionary(g => g.Key, g => g.Select(x => x.Dto).ToList());
 
-            // ── Stitch together ───────────────────────────────────────────────────
+       
             var result = pagePosts.Select(p => new PostFeedItemDTO
             {
                 Post_ID = p.Post_ID,
@@ -121,5 +124,47 @@ namespace Alumni_Portal.OpenPortalPages.MainPage.Respositories
 
             return (result, hasMore);
         }
+
+        public async Task<List<BannerPostDTO>> GetBannerPostsAsync(bool takeLimit, List<int>? postTypeIds )
+        {
+            IQueryable<Posts> query = _context.Posts
+           .AsNoTracking()
+           .Where(p => postTypeIds == null || (p.Post_Type_ID.HasValue && postTypeIds.Contains(p.Post_Type_ID.Value)))
+           .Where(p => p.Visible_In_Feed == false)
+           .OrderByDescending(e => e.Published_Date);
+            if (takeLimit)
+            {
+                query = query.Take(5);
+            }
+
+            var result = await query
+                .GroupJoin(
+                    _context.Post_Media,
+                    post => post.Post_ID,
+                    media => media.Post_ID,
+                    (post, mediaGroup) => new { post, mediaGroup }
+                )
+                .Select(x => new BannerPostDTO
+                {
+                    Post_ID = x.post.Post_ID,
+                    Post_Type_Value = x.post.Post_Type_Value,
+                    Post_Title = x.post.Post_Title,
+                    Post_Content = x.post.Post_Content,
+                    Published_Date = x.post.Published_Date,
+
+                   
+                    Media_File_Location = x.mediaGroup
+                                .Select(m => m.Media_File_Location)
+                                .FirstOrDefault()
+                })
+                .ToListAsync();
+
+            return result;
+        }
+
+
+
+
+
     }
 }

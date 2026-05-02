@@ -1,10 +1,15 @@
+using Alumni_Portal.Engagement.Services;
 using Alumni_Portal.Entity_Directories;
 using Alumni_Portal.Exceptions;
 using Alumni_Portal.FileUploads;
+using Alumni_Portal.Infrastructure.Persistance;
 using Alumni_Portal.OpenPortalPages.Feed;
 using Alumni_Portal.OpenPortalPages.ProjectFeed;
 using Alumni_Portal.Profiles;
+using Alumni_Portal.RAID;
+using Alumni_Portal.RAID.Login;
 using Alumni_Portal.TenantConfiguration;
+using Microsoft.EntityFrameworkCore;
 using Project.Infrastructure;
 using Quartz;
 using Shared.Auth;
@@ -29,29 +34,45 @@ builder.Services.AddScoped<ITenantService, TenantService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("FrontendPolicy", policy =>
+//        policy.WithOrigins("")
+//              .AllowAnyHeader()
+//              .AllowAnyMethod());
+
+//});
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("FrontendPolicy", policy =>
-        policy.WithOrigins("http://localhost:4200")
-              .AllowAnyHeader()
-              .AllowAnyMethod());
-        
+    options.AddPolicy("DevCors", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
 });
+
+
+
 builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<AttachmentService>();
-
+builder.Services.AddScoped<RequestProcessing>();
 
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis")));
 
+builder.Services.AddDbContext<SharedDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
 //builder.Services.AddQuartz(q =>
 //{
-   
 
-    
+
+
 //    q.UsePersistentStore(s =>
 //    {
 //        s.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -93,6 +114,16 @@ builder.Services.AddFeedInfrastructure(builder.Configuration);
 builder.Services.AddProjectFeedInfrastructure(builder.Configuration);
 builder.Services.AddProfileInfrastructure(builder.Configuration);
 builder.Services.AddTenantConfigurationInfrastructure(builder.Configuration);
+builder.Services.AddRAIDInfrastructure(builder.Configuration);
+//Main chal lon ga bhai. Main chal lon ga bhai. Main chal lon ga. Main chal lon ga. Main cha
+
+//HttpClient
+
+builder.Services.AddHttpClient("AuthorizedRAIDClient", client =>
+{
+    client.BaseAddress = new Uri("https://raid-v2.init-global.com/raid-phase2-platform/api/");
+});
+
 
 
 var app = builder.Build();
@@ -105,9 +136,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors("FrontendPolicy");
-
-app.UseHttpsRedirection();
+//app.UseCors("FrontendPolicy");
+app.UseRouting();
+app.UseCors("DevCors");
+//app.UseHttpsRedirection();
 app.UseExceptionHandler();
 //app.UseAuthentication();
 //app.UseMiddleware<TenantMiddleware>();

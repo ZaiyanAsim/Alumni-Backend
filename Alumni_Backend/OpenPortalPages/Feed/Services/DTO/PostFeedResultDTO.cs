@@ -41,7 +41,7 @@
         public DateTime? CursorDate { get; set; }
         public int? CursorPostId { get; set; }
         public int PageSize { get; set; } = 20;
-        public int? Post_Type_Id { get; set; }
+        public List<int>? Post_Type_Id { get; set; }
     }
 
 

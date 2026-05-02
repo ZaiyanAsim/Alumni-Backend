@@ -7,10 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Entity Directories\Public API\**" />
+    <Content Remove="Entity Directories\Public API\**" />
+    <EmbeddedResource Remove="Entity Directories\Public API\**" />
+    <None Remove="Entity Directories\Public API\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.22" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.22" />
     <PackageReference Include="Quartz.Extensions.Hosting" Version="3.18.0" />
     <PackageReference Include="Quartz.Serialization.Json" Version="3.18.0" />
+    <PackageReference Include="RabbitMQ.Client" Version="7.2.1" />
     <PackageReference Include="StackExchange.Redis" Version="2.12.14" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
@@ -23,7 +31,7 @@
 
   <ItemGroup>
     <Folder Include="API\Profiles\ProjectProfile\" />
-    <Folder Include="Entity Directories\Public API\" />
+    <Folder Include="Notifications\" />
     <Folder Include="Profiles\Services\Abstractions\" />
   </ItemGroup>
 

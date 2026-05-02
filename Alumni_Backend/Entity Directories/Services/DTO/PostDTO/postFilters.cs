@@ -4,6 +4,8 @@
     {
         public List<int?> Types { get; set; } = [];
 
+        public Boolean? Visible_In_Feed { get; set; }
+
         public List<int?> Association_Types{ get; set; } = [];
 
         

@@ -30,6 +30,8 @@ namespace Alumni_Portal.Infrastructure.Data_Models
         [MaxLength(100)]
         public string Post_Type_Value { get; set; } = null!;
 
+        public Boolean Visible_In_Feed { get; set; } = true;    
+
         [Required]
         [MaxLength(100)]
         public string Post_Title { get; set; } = null!;
