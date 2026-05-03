@@ -25,7 +25,7 @@ namespace Alumni_Portal.OpenPortalPages.MainPage.Services
         {
             int pageSize = Math.Clamp(query.PageSize, 1, 100);
 
-            var (posts, hasMore) = await _repo.GetFeedAsync(
+            var (posts, hasMore) = await _repo.GetPaginatedFeedAsync(
                 query.Post_Type_Id,
                 query.CursorDate,
                 query.CursorPostId ?? 0,

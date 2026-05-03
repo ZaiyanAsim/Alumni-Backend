@@ -29,7 +29,7 @@ namespace Entity_Directories.Repositories
         {
             var posts = _context.Posts
                           .Where(p => filters.Types == null || filters.Types.Count == 0 || filters.Types.Contains(p.Post_Type_ID) || filters.Association_Types.Contains(p.Post_Association_ID))
-                          .Where(p => filters.Visible_In_Feed == null || p.Visible_In_Feed == filters.Visible_In_Feed)
+                         
                           .Select(PostMappings.PostToDTO())
                           .OrderByDescending(p => p.Created_Date);
 

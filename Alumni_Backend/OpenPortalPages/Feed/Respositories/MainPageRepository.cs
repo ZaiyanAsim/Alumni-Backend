@@ -16,25 +16,25 @@ namespace Alumni_Portal.OpenPortalPages.MainPage.Respositories
             _sharedContext = sharedContext;
         }
 
-        public async Task<(List<PostFeedItemDTO> Posts, bool HasMore)> GetFeedAsync(
+        public async Task<(List<PostFeedItemDTO> Posts, bool HasMore)> GetPaginatedFeedAsync(
             List<int>? postTypeId,
             DateTime? cursorDate,
             int cursorPostId,
             int pageSize,
             CancellationToken ct = default)
         {
-         
+
             int fetchCount = pageSize + 1;
 
             var query = _context.Posts
                 .AsNoTracking()
                 .Where(p => p.Published_Date < DateTime.UtcNow);
 
-     
-            if (postTypeId != null && postTypeId.Count > 0)
-                query = query.Where(p => p.Post_Type_ID.HasValue && postTypeId.Contains(p.Post_Type_ID.Value) && p.Visible_In_Feed == true);
 
-       
+            if (postTypeId != null && postTypeId.Count > 0)
+                query = query.Where(p => p.Post_Type_ID.HasValue && postTypeId.Contains(p.Post_Type_ID.Value));
+
+
             if (cursorDate.HasValue)
             {
                 query = query.Where(p =>
@@ -42,7 +42,7 @@ namespace Alumni_Portal.OpenPortalPages.MainPage.Respositories
                     (p.Published_Date == cursorDate.Value && p.Post_ID < cursorPostId));
             }
 
-       
+
             var rawPosts = await query
                 .OrderByDescending(p => p.Published_Date)
                 .ThenByDescending(p => p.Post_ID)
@@ -53,7 +53,7 @@ namespace Alumni_Portal.OpenPortalPages.MainPage.Respositories
                     p.Post_Type_Value,
                     p.Post_Title,
                     p.Post_Tags,
-                    p.Post_Content, 
+                    p.Post_Content,
                     p.Published_Date,
                 })
                 .ToListAsync(ct);
@@ -66,7 +66,7 @@ namespace Alumni_Portal.OpenPortalPages.MainPage.Respositories
 
             var postIds = pagePosts.Select(p => p.Post_ID).ToList();
 
-      
+
             var mentions = await _context.Post_Mentions
                 .AsNoTracking()
                 .Where(m => postIds.Contains(m.Post_ID))
@@ -82,7 +82,7 @@ namespace Alumni_Portal.OpenPortalPages.MainPage.Respositories
                 })
                 .ToListAsync(ct);
 
-        
+
             var media = await _context.Post_Media
                 .AsNoTracking()
                 .Where(m => postIds.Contains(m.Post_ID))
@@ -100,7 +100,7 @@ namespace Alumni_Portal.OpenPortalPages.MainPage.Respositories
                 })
                 .ToListAsync(ct);
 
-      
+
             var mentionsByPost = mentions
                 .GroupBy(x => x.Post_ID)
                 .ToDictionary(g => g.Key, g => g.Select(x => x.Dto).ToList());
@@ -109,7 +109,7 @@ namespace Alumni_Portal.OpenPortalPages.MainPage.Respositories
                 .GroupBy(x => x.Post_ID)
                 .ToDictionary(g => g.Key, g => g.Select(x => x.Dto).ToList());
 
-       
+
             var result = pagePosts.Select(p => new PostFeedItemDTO
             {
                 Post_ID = p.Post_ID,
@@ -124,13 +124,32 @@ namespace Alumni_Portal.OpenPortalPages.MainPage.Respositories
 
             return (result, hasMore);
         }
+       
+        
+        //public async Task<List<PostFeedItemDTO>> GetMainPagePostsAsync()
+        //{
+        //    var posts = await _context.Posts
+        //        .AsNoTracking()
+        //        .Where(p => p.Visible_ == true)
+        //        .OrderByDescending(p => p.Published_Date)
+        //        .Select(p => new PostFeedItemDTO
+        //        {
+        //            Post_ID = p.Post_ID,
+        //            Post_Type_Value = p.Post_Type_Value,
+        //            Post_Title = p.Post_Title,
+        //            Post_Content = p.Post_Content,
+        //            Published_Date = p.Published_Date,
+        //        })
+        //        .ToListAsync();
+        //    return posts;
+        //}
 
         public async Task<List<BannerPostDTO>> GetBannerPostsAsync(bool takeLimit, List<int>? postTypeIds )
         {
             IQueryable<Posts> query = _context.Posts
            .AsNoTracking()
            .Where(p => postTypeIds == null || (p.Post_Type_ID.HasValue && postTypeIds.Contains(p.Post_Type_ID.Value)))
-           .Where(p => p.Visible_In_Feed == false)
+           .Where(p => p.Is_Banner_Post == true)
            .OrderByDescending(e => e.Published_Date);
             if (takeLimit)
             {
