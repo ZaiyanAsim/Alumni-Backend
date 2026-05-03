@@ -1,7 +1,7 @@
 ﻿
-using Entity_Directories.Services.DTO;
 using Alumni_Portal.Infrastrcuture.Data_Models;
 using Alumni_Portal.Infrastructure.Data_Models;
+using Entity_Directories.Services.DTO;
 
 namespace Entity_Directories.Services.Abstractions
 {
@@ -16,7 +16,6 @@ namespace Entity_Directories.Services.Abstractions
         public Task<List<Post_Media>> GetMediaByPostIdAsync(int postId);
 
         public Task<postDirectoryDTO?> GetByIdAsync(int id);
-
 
     }
 }

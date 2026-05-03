@@ -1,7 +1,6 @@
 ﻿using Alumni_Portal.FileUploads;
 using Alumni_Portal.Infrastructure.Data_Models;
 using Entity_Directories.Services;
-using Entity_Directories.Services;
 using Entity_Directories.Services.DTO;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -86,7 +85,7 @@ namespace Admin.Controllers
             var response = new
             {
                 Status = "Success",
-                Message = "Project successfully created.",
+                Message = "Post successfully created.",
                 Post_ID = createdId,
                 accessUrl = $"/api/Admin/posts/{createdId}"
             };
@@ -101,7 +100,7 @@ namespace Admin.Controllers
             var media = await _handler.GetMediaByPostId(postId);
             var result = media.Select(m => new
             {
-                m.Post_Media_Id,
+                m.Post_Media_ID,
                 m.Media_Title,
                 m.Media_File_Name,
                 m.Media_File_Location,
@@ -109,7 +108,6 @@ namespace Admin.Controllers
             });
             return Ok(result);
         }
-
 
         [HttpPost("media/{postId}")]
         public async Task<IActionResult> AddMediaToPost([FromForm] List<IFormFile> media, int postId)
@@ -121,16 +119,16 @@ namespace Admin.Controllers
 
             var postMediaList = uploadResult.UploadedFiles.Select(file => new Post_Media
             {
-                Post_Id = postId,
+                Post_ID = postId,
                 Media_Title = file.Media_Title,
                 Media_Date = file.Media_Date,
                 Media_File_Location = file.Media_File_Location,
                 Media_File_Name = file.Media_File_Name,
                 Progress_Value = "Uploaded",
                 Status_Value = "Active",
-                Progress_Id = 1,
-                Status_Id = 1,
-                Created_By_Id = 1,
+                Progress_ID = 1,
+                Status_ID = 1,
+                Created_By_ID = 1,
                 Created_By_Name = "Admin",
                 Created_Date = DateTime.UtcNow,
             }).ToList();

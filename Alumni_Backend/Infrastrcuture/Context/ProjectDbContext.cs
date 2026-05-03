@@ -31,6 +31,8 @@ namespace Alumni_Portal.Infrastructure.Persistence
 
         public DbSet<Project_Attachments> Project_Attachments { get; set; }
 
+        public DbSet<Project_Media> Project_Media { get; set; }
+
         public DbSet <Project_Results> Project_Results { get; set; }
 
         public DbSet<Project_Delivarables> Project_Deliverables { get; set; }

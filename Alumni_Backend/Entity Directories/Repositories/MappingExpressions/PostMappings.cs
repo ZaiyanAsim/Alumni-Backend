@@ -37,6 +37,7 @@ namespace Entity_Directories.Repositories.MappingExpressions
                 Status_Value = i.Status_Value,
                 Post_Type_ID = i.Post_Type_ID,
                 Post_Type_Value = i.Post_Type_Value ?? "General",
+                Is_Banner_Post = i.Is_Banner_Post,
                 Post_Tags = i.Post_Tags,
                 Created_By_Name = i.Created_By_Name,
                 Created_Date = i.Created_Date,

@@ -1,4 +1,4 @@
-﻿using Alumni_Portal.FileUploads.DTO;
+using Alumni_Portal.FileUploads.DTO;
 using System.Globalization;
 using System.Numerics;
 
@@ -7,7 +7,7 @@ namespace Alumni_Portal.Profiles.DTO
 {
     public class ProjectProfileResponseDTO
     {
-        
+
         public  MetaDataDTO Header_Data  { get; set; }
         public List<MemberDTO>? Members { get; set; } =new List<MemberDTO>();
 
@@ -88,6 +88,11 @@ namespace Alumni_Portal.Profiles.DTO
         public bool? Is_Mentored { get; init; }
 
         public bool? Is_Sponsored { get; init; }
+
+        public bool? Is_Mentorship_Available { get; init; }
+
+        public bool? Is_Sponsorship_Available { get; init; }
+
         public string Logo_Url { get; set; }
 
         public string Video_Url { get; set; }
@@ -95,12 +100,13 @@ namespace Alumni_Portal.Profiles.DTO
     }
 
 
-
     public class ProjectResultsDTO
     {
         public int Seq_Number { get; set; }
         public required string Title { get; set; }
         public string? Description { get; set; }
+
+        public int? Type_ID { get; set; }
         public string? Type_Value { get; set; }
 
         public string? Image_Url { get; set; }
@@ -112,22 +118,25 @@ namespace Alumni_Portal.Profiles.DTO
         public string? Tags { get; set; }
 
         public string? Link { get; set; }
+
+        public IFormFile? Image { get; set; }
     }
 
     public class ProjectDeliverablesDTO
     {
-        
+
         public required string Title { get; set; }
         public string? Description { get; set; }
+
+        public int? Status_ID { get; set; }
+
+        public int? Category_ID { get; set; }
         public string? Status_Value { get; set; }
 
         public string? Category_Value { get; set; }
 
         public DateTime Date { get; set; }
     }
-
-
-
 
 
 

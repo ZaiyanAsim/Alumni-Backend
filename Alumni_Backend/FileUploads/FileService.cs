@@ -26,6 +26,7 @@ namespace Alumni_Portal.FileUploads
         {
             var response = new UploadResponseDTO();
 
+
             if (media == null || !media.Any())
             {
                 response.errorMessage = "No media provided.";

@@ -1,13 +1,22 @@
 using System.Text.Json;
+using Alumni_Portal.Engagement.Services;
+using Alumni_Portal.Entity_Directories;
+using Alumni_Portal.Exceptions;
+using Alumni_Portal.FileUploads;
+using Alumni_Portal.Infrastructure.Persistance;
+using Alumni_Portal.OpenPortalPages.Feed;
+using Alumni_Portal.OpenPortalPages.ProjectFeed;
+using Alumni_Portal.Profiles;
+using Alumni_Portal.RAID;
+using Alumni_Portal.RAID.Login;
+using Alumni_Portal.TenantConfiguration;
+using Microsoft.EntityFrameworkCore;
 using Project.Infrastructure;
 using Shared.Auth;
-using Shared.TenantService;
 using Shared.Custom_Exceptions;
+using Shared.TenantService;
+using StackExchange.Redis;
 using Users.Infrastructure;
-using Alumni_Portal.Exceptions;
-using Alumni_Portal.Entity_Directories;
-using Alumni_Portal.TenantConfiguration;
-using Alumni_Portal.FileUploads;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,11 +39,41 @@ builder.Services.AddCors(options =>
         policy.WithOrigins("http://localhost:4200")
               .AllowAnyHeader()
               .AllowAnyMethod());
-        
+
 });
+
 builder.Services.AddScoped<FileService>();
+builder.Services.AddScoped<AttachmentService>();
+builder.Services.AddScoped<RequestProcessing>();
 builder.Services.AddScoped<Alumni_Portal.Profiles.Repositories.ProjectReadRepo>();
 builder.Services.AddScoped<Alumni_Portal.Profiles.Services.ProjectProfileService>();
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+    ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis")));
+
+builder.Services.AddDbContext<SharedDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+//builder.Services.AddQuartz(q =>
+//{
+
+
+
+//    q.UsePersistentStore(s =>
+//    {
+//        s.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+//        s.UseJsonSerializer();
+//    });
+//});
+
+//// Start the Quartz hosted service
+//builder.Services.AddQuartzHostedService(opt =>
+//{
+//    opt.WaitForJobsToComplete = true;
+//    opt.AwaitApplicationStarted = true; // important: wait for DI to be ready
+//});
 
 
 builder.Services.AddControllers()
@@ -59,7 +98,19 @@ builder.Services.AddProblemDetails();
 builder.Services.AddUsersInfrastructure(builder.Configuration);
 builder.Services.AddProjectsInfrastructure(builder.Configuration);
 builder.Services.AddEntityDirectoriesInfrastructure(builder.Configuration);
+builder.Services.AddFeedInfrastructure(builder.Configuration);
+builder.Services.AddProjectFeedInfrastructure(builder.Configuration);
+builder.Services.AddProfileInfrastructure(builder.Configuration);
 builder.Services.AddTenantConfigurationInfrastructure(builder.Configuration);
+builder.Services.AddRAIDInfrastructure(builder.Configuration);
+
+//HttpClient
+builder.Services.AddHttpClient("AuthorizedRAIDClient", client =>
+{
+    client.BaseAddress = new Uri("https://raid-v2.init-global.com/raid-phase2-platform/api/");
+});
+
+
 var app = builder.Build();
 
 
@@ -72,6 +123,7 @@ if (app.Environment.IsDevelopment())
 }
 app.UseCors("FrontendPolicy");
 
+app.UseRouting();
 app.UseHttpsRedirection();
 app.UseExceptionHandler();
 //app.UseAuthentication();

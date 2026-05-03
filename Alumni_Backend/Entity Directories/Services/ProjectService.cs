@@ -122,7 +122,8 @@ namespace Entity_Directories.Services
 
                      Project_ID = projectid,
                      Individual_ID = id,
-                     
+                     Individual_Role = member.Individual_Role,
+
                  });
 
             }

@@ -55,6 +55,10 @@ public class Projects
 
     public bool? Is_Sponsored { get; set; } = false;
 
+    public bool Is_Mentorship_Available { get; set; } = false;
+
+    public bool Is_Sponsorship_Available { get; set; } = false;
+
     public int? Progress_ID { get; set; }
 
     [MaxLength(50)]
@@ -154,6 +158,39 @@ public class Project_Attachments
     public DateTime? Updated_Date { get; set; }
 }
 
+
+public class Project_Media
+{
+    [Key]
+    public int Project_Media_ID { get; set; }
+
+    public Projects Project { get; set; } = null!;
+    [Required]
+    [ForeignKey("Project_ID")]
+    public int Project_ID { get; set; }
+
+
+    public DateTime Media_Date { get; set; }
+    public string Media_Title { get; set; }
+    public string Media_Description { get; set; }
+
+    public string Media_File_Location { get; set; }
+    public string Media_File_Name { get; set; }
+
+    public int Progress_ID { get; set; }
+    public string Progress_Value { get; set; }
+
+    public int Status_ID { get; set; }
+    public string Status_Value { get; set; }
+
+    public int Created_By_ID { get; set; }
+    public string Created_By_Name { get; set; }
+    public DateTime Created_Date { get; set; }
+
+    public int? Updated_By_ID { get; set; }
+    public string Updated_By_Name { get; set; }
+    public DateTime? Updated_Date { get; set; }
+}
 
 
 [Table("Project_Results")]

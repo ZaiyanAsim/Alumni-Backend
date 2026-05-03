@@ -1,4 +1,4 @@
-﻿using Alumni_Portal.Infrastructure.Data_Models;
+using Alumni_Portal.Infrastructure.Data_Models;
 using Alumni_Portal.Infrastructure.Persistance;
 using Alumni_Portal.Infrastructure.Persistence;
 using Alumni_Portal.Profiles.DTO;
@@ -18,7 +18,7 @@ namespace Alumni_Portal.Profiles.Repositories
         }
 
 
-        public async Task<object?> GetProjectHeaderAsync(int projectId, CancellationToken ct = default) // Rest details pof header will come from directory. This is better 
+        public async Task<object?> GetProjectHeaderAsync(int projectId, CancellationToken ct = default) // Rest details pof header will come from directory. This is better
         {
             return await _projectDbContext.Projects
                 .AsNoTracking()
@@ -36,6 +36,8 @@ namespace Alumni_Portal.Profiles.Repositories
                     Project_Description = p.Project_Description,
                     Is_Mentored = p.Is_Mentored,
                     Is_Sponsored = p.Is_Sponsored,
+                    Is_Mentorship_Available = p.Is_Mentorship_Available,
+                    Is_Sponsorship_Available = p.Is_Sponsorship_Available,
                 })
                 .FirstOrDefaultAsync(ct);
         }
@@ -69,9 +71,9 @@ namespace Alumni_Portal.Profiles.Repositories
                     (pm, i) => new MemberDTO(
                         i.Individual_ID,
                         i.Individual_Name,
+                        pm.Individual_Role,
                         i.Individual_Email,
-                        i.Logo_Url,
-                        pm.Individual_Role
+                        i.Logo_Url
                     )
                 )
                 .ToList();
@@ -161,11 +163,5 @@ namespace Alumni_Portal.Profiles.Repositories
 
 
 
-
-
-
-
-
     }
 }
-

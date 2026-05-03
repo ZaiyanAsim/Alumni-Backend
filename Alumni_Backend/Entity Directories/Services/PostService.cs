@@ -1,12 +1,12 @@
-﻿using Alumni_Portal.Entity_Directories.Repositories;
+using Alumni_Portal.Entity_Directories.Repositories;
+using Alumni_Portal.FileUploads;
+using Alumni_Portal.FileUploads.DTO;
 using Alumni_Portal.Infrastrcuture.Data_Models;
 using Alumni_Portal.Infrastructure.Data_Models;
 using Entity_Directories.Services.Abstractions;
 using Entity_Directories.Services.DTO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
-using Alumni_Portal.FileUploads.DTO;
-using Alumni_Portal.FileUploads;
 using Shared.Custom_Exceptions.ExceptionClasses;
 
 namespace Entity_Directories.Services
@@ -18,9 +18,8 @@ namespace Entity_Directories.Services
         //private FileService _fileService;
         public PostService(IPostRepository postRepo, SharedRepository sharedRepo)
         {
-            _postRepo = postRepo; 
+            _postRepo = postRepo;
             _sharedRepo = sharedRepo;
-           
         }
 
 
@@ -70,10 +69,9 @@ namespace Entity_Directories.Services
             {
                 throw new ValidationException("Post data cannot be null");
             }
-            
+
             int postId = await _postRepo.CreateAsync(newPost);
             return postId;
-
 
         }
 
@@ -90,10 +88,7 @@ namespace Entity_Directories.Services
 
         public async Task<List<int>> DeletePostsBulk(List<int> postIDs)
         {
-
-
             return await _postRepo.DeleteBulkAsync(postIDs);
-
         }
 
         public Task<MentionsResultDTO> PostMentions(string searchTerm, string type)
