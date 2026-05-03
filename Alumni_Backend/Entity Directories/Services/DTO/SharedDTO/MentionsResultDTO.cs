@@ -1,5 +1,12 @@
 ﻿namespace Entity_Directories.Services.DTO
 {
+    public class IndividualSearchResultDTO
+    {
+        public int Individual_ID { get; set; }
+        public string Individual_Institution_ID { get; set; } = string.Empty;
+        public string Individual_Name { get; set; } = string.Empty;
+    }
+
     public class MentionsResultDTO
     {
        public List<MentionDTO> IndividualMentions { get; set; } = [];

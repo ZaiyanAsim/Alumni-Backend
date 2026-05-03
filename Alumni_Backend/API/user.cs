@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
 using Entity_Directories.Services.DTO;
 using Alumni_Portal.Infrastructure.Data_Models;
 using Entity_Directories.Services;
@@ -24,6 +23,16 @@ namespace Admin.Controllers
             _userDirectory = userDirectory;
         }
 
+
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchIndividuals([FromQuery] string q)
+        {
+            if (string.IsNullOrWhiteSpace(q) || q.Length < 2)
+                return Ok(new { data = new List<object>() });
+
+            var results = await _userDirectory.SearchIndividuals(q);
+            return Ok(new { data = results });
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(string id)
@@ -82,6 +91,17 @@ namespace Admin.Controllers
             
 
             
+        }
+
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] UpdateUserDTO dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            await _userDirectory.UpdateUser(id, dto);
+            return Ok(new { Status = "Success", Message = "User updated successfully." });
         }
 
 

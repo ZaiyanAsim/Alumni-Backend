@@ -22,7 +22,11 @@ namespace Entity_Directories.Services
         public async Task<userDirectoryDTO?> GetUser(string individualInstitutionID)
         {
             return await _userRepo.GetUserByInstitutionID(individualInstitutionID);
-            
+        }
+
+        public async Task<List<IndividualSearchResultDTO>> SearchIndividuals(string query)
+        {
+            return await _sharedRepo.SearchIndividualsAsync(query);
         }
 
         public async Task<PaginatedResult<userDirectoryDTO>> GetUsersPaginated(string type, int _page, int _limit)
@@ -74,6 +78,15 @@ namespace Entity_Directories.Services
 
 
 
+
+        public async Task UpdateUser(string institutionId, UpdateUserDTO dto)
+        {
+            int id = await _sharedRepo.Individual_Exists_Async(institutionId);
+            if (id == 0)
+                throw new ValidationException("Individual not found");
+
+            await _userRepo.UpdateAsync(institutionId, dto);
+        }
 
         public async Task<List<int>> DeleteUsersBulk(List<int> individualIDs)
         {

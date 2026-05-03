@@ -75,7 +75,7 @@ namespace Alumni_Portal.Infrastructure.Data_Models
         [MaxLength(100)]
         public string Pusbished_By_Name { get; set; } = null!;
 
-        public DateTime? Published_Date { get; set; }
+        public DateTime Published_Date { get; set; }
     }
 
     public class Post_Mentions

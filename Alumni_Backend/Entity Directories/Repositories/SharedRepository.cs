@@ -1,6 +1,7 @@
 ﻿using Alumni_Portal.Infrastrcuture.Data_Models;
 using Alumni_Portal.Infrastructure.Persistance;
 using Alumni_Portal.Infrastructure.Persistence;
+using Alumni_Portal.Infrastructure.Data_Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Entity_Directories.Services.DTO;
@@ -141,6 +142,22 @@ namespace Alumni_Portal.Entity_Directories.Repositories
                 if (!wasOpen) connection.Close();
             }
             return result;
+        }
+
+        public async Task<List<IndividualSearchResultDTO>> SearchIndividualsAsync(string searchterm)
+        {
+            return await _individualContext.Individuals
+                .AsNoTracking()
+                .Where(i => i.Individual_Name.Contains(searchterm) || (i.Individual_Institution_ID != null && i.Individual_Institution_ID.Contains(searchterm)))
+                .OrderBy(i => i.Individual_Name)
+                .Take(10)
+                .Select(i => new IndividualSearchResultDTO
+                {
+                    Individual_ID = i.Individual_ID,
+                    Individual_Institution_ID = i.Individual_Institution_ID ?? "",
+                    Individual_Name = i.Individual_Name,
+                })
+                .ToListAsync();
         }
 
         public List<MentionDTO> MentionsIndividual(string searchterm)

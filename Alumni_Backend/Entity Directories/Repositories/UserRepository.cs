@@ -103,5 +103,16 @@ namespace Entity_Directories.Repositories
         }
 
 
+        public async Task UpdateAsync(string institutionId, UpdateUserDTO dto)
+        {
+            await _context.Individuals
+                .Where(i => i.Individual_Institution_ID == institutionId)
+                .ExecuteUpdateAsync(s =>
+                    s.SetProperty(i => i.Individual_Name,           i => dto.Name             ?? i.Individual_Name)
+                     .SetProperty(i => i.Individual_Email,          i => dto.Email            ?? i.Individual_Email)
+                     .SetProperty(i => i.Individual_Current_Industry, i => dto.Current_Industry ?? i.Individual_Current_Industry)
+                     .SetProperty(i => i.Individual_Current_Role,   i => dto.Current_Role     ?? i.Individual_Current_Role)
+                );
+        }
     }
 }

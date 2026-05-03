@@ -71,6 +71,14 @@ namespace Entity_Directories.Services.DTO
       
         
 
+    public class UpdateUserDTO
+    {
+        public string? Name { get; set; }
+        public string? Email { get; set; }
+        public string? Current_Industry { get; set; }
+        public string? Current_Role { get; set; }
+    }
+
     public class BaseUserDTO
     {
         public string Individual_Name { get; set; }

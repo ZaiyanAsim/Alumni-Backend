@@ -12,6 +12,8 @@ namespace Entity_Directories.Services.Abstractions
 
         public Task<List<int>> DeleteBulkAsync(List<int> individualIds);
 
+        public Task UpdateAsync(string institutionId, UpdateUserDTO dto);
+
         }
     }
 

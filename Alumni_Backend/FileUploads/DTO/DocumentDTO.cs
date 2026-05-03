@@ -1,3 +1,4 @@
+﻿using Quartz.Impl.Triggers;
 using System.Diagnostics.Contracts;
 
 namespace Alumni_Portal.FileUploads.DTO
@@ -7,7 +8,7 @@ namespace Alumni_Portal.FileUploads.DTO
     {
         public IFormFile File { get; set; }
         public string Title { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
     }
 
     public class DocumentUploadResponseDTO
@@ -19,9 +20,9 @@ namespace Alumni_Portal.FileUploads.DTO
     public class DocumentDTO
     {
         public string Attachment_Title { get; set; }
-        public string Attachment_Type { get; set; }
-        public string Attachment_Description { get; set; }
-        public int Attachment_Size { get; set; }
+        public string? Attachment_Type { get; set; }
+        public string? Attachment_Description { get; set; }
+        public long Attachment_Size { get; set; }
 
         public DateTime Attachment_Date { get; set; }
 
@@ -30,6 +31,9 @@ namespace Alumni_Portal.FileUploads.DTO
         public string Attachment_File_Name { get; set; }
 
     }
+    
+
+
 
 
 }
