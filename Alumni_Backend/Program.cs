@@ -11,6 +11,7 @@ using Alumni_Portal.RAID;
 using Alumni_Portal.RAID.Login;
 using Alumni_Portal.TenantConfiguration;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Project.Infrastructure;
 using Shared.Auth;
 using Shared.Custom_Exceptions;
@@ -134,3 +135,4 @@ app.UseStaticFiles();
 app.MapControllers();
 
 app.Run();
+ 
