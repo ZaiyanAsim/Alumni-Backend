@@ -32,8 +32,12 @@ namespace Shared.Auth
 
             var key = Encoding.UTF8.GetBytes(jwtSettings.SecretKey);
 
-            services.AddAuthentication("Bearer")
-                .AddJwtBearer("Bearer", options =>
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = "AdminBearer";
+                options.DefaultChallengeScheme = "AdminBearer";
+            })
+                .AddJwtBearer("AdminBearer", options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {

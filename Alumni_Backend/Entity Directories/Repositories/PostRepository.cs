@@ -35,7 +35,7 @@ namespace Entity_Directories.Repositories
 
             return posts;
         }
-
+       
         public async Task<postDirectoryDTO?> GetByIdAsync(int id)
         {
             return await _context.Posts

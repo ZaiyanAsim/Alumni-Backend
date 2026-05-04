@@ -10,12 +10,14 @@ using Alumni_Portal.RAID;
 using Alumni_Portal.RAID.Login;
 using Alumni_Portal.TenantConfiguration;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Project.Infrastructure;
 using Quartz;
 using Shared.Auth;
 using Shared.Custom_Exceptions;
 using Shared.TenantService;
 using StackExchange.Redis;
+using System.Text;
 using System.Text.Json;
 using Users.Infrastructure;
 
@@ -126,6 +128,7 @@ builder.Services.AddHttpClient("AuthorizedRAIDClient", client =>
 
 
 
+
 var app = builder.Build();
 
 
@@ -149,3 +152,4 @@ app.UseStaticFiles();
 app.MapControllers();
 
 app.Run();
+ 

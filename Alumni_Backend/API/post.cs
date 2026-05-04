@@ -3,6 +3,7 @@ using Alumni_Portal.Infrastructure.Data_Models;
 using Entity_Directories.Services;
 using Entity_Directories.Services;
 using Entity_Directories.Services.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +37,7 @@ namespace Admin.Controllers
             _fileService = fileService;
         }
 
+     
 
         [HttpGet("{id}")]
         public async Task<ActionResult> GetPostById(int id)
@@ -52,7 +54,7 @@ namespace Admin.Controllers
 
             var response = await _handler.GetPostsPaginated(filters, _page, _size);
             return Ok(response);
-
+           
 
         }
 
