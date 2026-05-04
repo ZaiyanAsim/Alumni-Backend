@@ -36,6 +36,8 @@ namespace Alumni_Portal.Infrastructure.Persistence
         public DbSet <Project_Results> Project_Results { get; set; }
 
         public DbSet<Project_Delivarables> Project_Deliverables { get; set; }
+
+        public DbSet<Project_Methodologies> Project_Methodologies { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

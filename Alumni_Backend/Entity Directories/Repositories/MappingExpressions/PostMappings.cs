@@ -41,7 +41,7 @@ namespace Entity_Directories.Repositories.MappingExpressions
                 Post_Tags = i.Post_Tags,
                 Created_By_Name = i.Created_By_Name,
                 Created_Date = i.Created_Date,
-                Published_Date = i.Published_Date,
+                Published_Date = i.Published_Date ?? DateTime.UtcNow,
                 Pusbished_By_Name = i.Created_By_Name ?? "Admin"
             };
 

@@ -36,8 +36,8 @@ namespace Alumni_Portal.Profiles.Repositories
                     Project_Description = p.Project_Description,
                     Is_Mentored = p.Is_Mentored,
                     Is_Sponsored = p.Is_Sponsored,
-                    Is_Mentorship_Available = p.Is_Mentorship_Available,
-                    Is_Sponsorship_Available = p.Is_Sponsorship_Available,
+                    Is_Mentorship_Available = p.Is_Mentored,
+                    Is_Sponsorship_Available = p.Is_Sponsored,
                 })
                 .FirstOrDefaultAsync(ct);
         }
@@ -47,7 +47,7 @@ namespace Alumni_Portal.Profiles.Repositories
             var projectMembers = await _projectDbContext.Project_Individuals
                 .AsNoTracking()
                 .Where(pi => pi.Project_ID == projectId)
-                .Select(pi => new { pi.Individual_ID, pi.Individual_Role })
+                .Select(pi => new { pi.Project_Individuals_Map_ID, pi.Individual_ID, pi.Individual_Role })
                 .ToListAsync(ct);
 
             if (!projectMembers.Any())
@@ -69,6 +69,7 @@ namespace Alumni_Portal.Profiles.Repositories
                     pm => pm.Individual_ID,
                     i => i.Individual_ID,
                     (pm, i) => new MemberDTO(
+                        pm.Project_Individuals_Map_ID,
                         i.Individual_ID,
                         i.Individual_Name,
                         pm.Individual_Role,
@@ -117,6 +118,7 @@ namespace Alumni_Portal.Profiles.Repositories
                 .OrderByDescending(r => r.Result_Seq_Number)
                 .Select(r => new ProjectResultsDTO
                 {
+                    Result_ID = r.Project_Result_ID,
                     Seq_Number = r.Result_Seq_Number ?? 0,
                     Title = r.Result_Title,
                     Description = r.Result_Description!,
@@ -137,6 +139,7 @@ namespace Alumni_Portal.Profiles.Repositories
                 .Where(t => t.Project_ID == projectId)
                 .Select(t => new TechStackDTO
                 {
+                    StackId = t.Project_Stack_ID,
                     Layer = t.Layer_Value,
                     Technology = t.Technology_Value,
                 })
@@ -151,6 +154,7 @@ namespace Alumni_Portal.Profiles.Repositories
                 .OrderByDescending(d => d.Date)
                 .Select(d => new ProjectDeliverablesDTO
                 {
+                    Deliverable_ID = d.Project_Deliverables_ID,
                     Title = d.Deliverable_Title,
                     Description = d.Deliverable_Description ?? "",
                     Status_Value = d.Deliverable_Status_Value!,
@@ -160,8 +164,41 @@ namespace Alumni_Portal.Profiles.Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<MethodologyDTO>> GetMethodologiesAsync(int projectId)
+        {
+            return await _projectDbContext.Project_Methodologies
+                .AsNoTracking()
+                .Where(m => m.Project_ID == projectId)
+                .Select(m => new MethodologyDTO
+                {
+                    MethodologyId = m.Project_Methodology_ID,
+                    Value = m.Methodology_Value,
+                })
+                .ToListAsync();
+        }
 
+        public async Task<List<IndividualSearchDTO>> SearchIndividualsAsync(string query, string? role = null, CancellationToken ct = default)
+        {
+            bool sponsorSearch    = string.Equals(role, "Sponsor",    StringComparison.OrdinalIgnoreCase);
+            bool supervisorSearch = string.Equals(role, "Supervisor", StringComparison.OrdinalIgnoreCase);
+            bool memberSearch     = string.Equals(role, "Member",     StringComparison.OrdinalIgnoreCase);
 
-
+            return await _individualDbContext.Individuals
+                .AsNoTracking()
+                .Where(i => (i.Individual_Name.Contains(query) || (i.Individual_Email != null && i.Individual_Email.Contains(query)))
+                            && (!sponsorSearch    || i.Individual_Is_Alumni)
+                            && (!supervisorSearch || i.Individual_Type_Value.ToLower() == "supervisor")
+                            && (!memberSearch     || i.Individual_Type_Value.ToLower() == "student"))
+                .Select(i => new IndividualSearchDTO
+                {
+                    Individual_ID = i.Individual_ID,
+                    Individual_Name = i.Individual_Name,
+                    Individual_Email = i.Individual_Email,
+                    Logo_Url = i.Logo_Url,
+                    Individual_Is_Alumni = i.Individual_Is_Alumni,
+                })
+                .Take(20)
+                .ToListAsync(ct);
+        }
     }
 }

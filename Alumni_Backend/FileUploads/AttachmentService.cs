@@ -71,7 +71,7 @@ namespace Alumni_Portal.FileUploads
                     Attachment_File_Name = newFileName,
                     Attachment_File_Location = $"/documents/{newFileName}",
                  
-                    Attachment_Size =(int)Math.Round(file.Length / (1024.0 * 1024.0), 2),
+                    Attachment_Size = file.Length,
                     Attachment_Type = extension,
                     Attachment_Date = DateTime.UtcNow
                 };

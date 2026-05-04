@@ -38,8 +38,8 @@ namespace Alumni_Portal.Profiles.Services
         public Task<List<MethodologyDTO>> GetMethodologiesAsync(int projectId, CancellationToken ct = default)
             => _repo.GetMethodologiesAsync(projectId);
 
-        public Task<List<IndividualSearchDTO>> SearchIndividualsAsync(string query, bool alumniOnly = false, CancellationToken ct = default)
-            => _repo.SearchIndividualsAsync(query, alumniOnly, ct);
+        public Task<List<IndividualSearchDTO>> SearchIndividualsAsync(string query, string? role = null, CancellationToken ct = default)
+            => _repo.SearchIndividualsAsync(query, role, ct);
 
         public async Task<ProjectProfileResponseDTO> GetFullProfileAsync(int projectId, CancellationToken ct = default)
         {

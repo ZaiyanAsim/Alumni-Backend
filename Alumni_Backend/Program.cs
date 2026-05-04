@@ -46,9 +46,6 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<AttachmentService>();
 builder.Services.AddScoped<RequestProcessing>();
-builder.Services.AddScoped<Alumni_Portal.Profiles.Repositories.ProjectReadRepo>();
-builder.Services.AddScoped<Alumni_Portal.Profiles.Services.ProjectProfileService>();
-
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis")));
 

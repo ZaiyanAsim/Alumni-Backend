@@ -62,17 +62,14 @@ namespace Alumni_Portal.OpenPortalPages.ProjectListing.Repository
 
                 if (cursorProject is not null)
                 {
-                    int cursorPriority = (cursorProject.Is_Sponsored ? 1 : 0)
-                                       + (cursorProject.Is_Mentored ? 1 : 0);
+                    int cursorPriority = (cursorProject.Is_Sponsored == true ? 1 : 0)
+                                       + (cursorProject.Is_Mentored == true ? 1 : 0);
 
                     q = q.Where(p =>
-                        // Lower priority bucket
-                        ((p.Is_Sponsored ? 1 : 0) + (p.Is_Mentored ? 1 : 0)) < cursorPriority ||
-                        // Same priority, older year
-                        (((p.Is_Sponsored ? 1 : 0) + (p.Is_Mentored ? 1 : 0)) == cursorPriority
+                        ((p.Is_Sponsored == true ? 1 : 0) + (p.Is_Mentored == true ? 1 : 0)) < cursorPriority ||
+                        (((p.Is_Sponsored == true ? 1 : 0) + (p.Is_Mentored == true ? 1 : 0)) == cursorPriority
                             && p.Project_Year < query.CursorYear.Value) ||
-                        // Same priority, same year, lower ID
-                        (((p.Is_Sponsored ? 1 : 0) + (p.Is_Mentored ? 1 : 0)) == cursorPriority
+                        (((p.Is_Sponsored == true ? 1 : 0) + (p.Is_Mentored == true ? 1 : 0)) == cursorPriority
                             && p.Project_Year == query.CursorYear.Value
                             && p.Project_ID < query.CursorProjectId.Value)
                     );
@@ -80,7 +77,7 @@ namespace Alumni_Portal.OpenPortalPages.ProjectListing.Repository
             }
 
             var raw = await q
-                .OrderByDescending(p => (p.Is_Sponsored ? 1 : 0) + (p.Is_Mentored ? 1 : 0))
+                .OrderByDescending(p => (p.Is_Sponsored == true ? 1 : 0) + (p.Is_Mentored == true ? 1 : 0))
                 .ThenByDescending(p => p.Project_Year)
                 .ThenByDescending(p => p.Project_ID)
                 .Take(fetchCount)

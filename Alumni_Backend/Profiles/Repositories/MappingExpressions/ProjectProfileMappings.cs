@@ -21,8 +21,8 @@ namespace Alumni_Portal.Profiles.Repositories.MappingExpressions
                 Project_Description = p.Project_Description,
                 Is_Mentored = p.Is_Mentored,
                 Is_Sponsored = p.Is_Sponsored,
-                Is_Mentorship_Available = p.Is_Mentorship_Available,
-                Is_Sponsorship_Available = p.Is_Sponsorship_Available,
+                Is_Mentorship_Available = p.Is_Mentored,
+                Is_Sponsorship_Available = p.Is_Sponsored,
             };
 
         public static Expression<Func<Project_Attachments, ProjectDocumentDto>> ToProjectDocumentDto =>

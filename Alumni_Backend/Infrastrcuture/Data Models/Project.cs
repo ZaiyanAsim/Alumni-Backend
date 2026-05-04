@@ -55,8 +55,10 @@ public class Projects
 
     public bool? Is_Sponsored { get; set; } = false;
 
+    [NotMapped]
     public bool Is_Mentorship_Available { get; set; } = false;
 
+    [NotMapped]
     public bool Is_Sponsorship_Available { get; set; } = false;
 
     public int? Progress_ID { get; set; }
@@ -98,9 +100,9 @@ public class Project_Attachments
     [Key]
     [Column("Project_Attachment_ID")]
     public int Project_Attachment_ID { get; set; }
-    public Projects Project { get; set; } = null!;
-    [Required]
     [ForeignKey("Project_ID")]
+    public Projects? Project { get; set; }
+    [Required]
     public int Project_ID { get; set; }
 
     [Column("Attachment_Date")]
@@ -164,9 +166,9 @@ public class Project_Media
     [Key]
     public int Project_Media_ID { get; set; }
 
+    [ForeignKey("Project_ID")]
     public Projects Project { get; set; } = null!;
     [Required]
-    [ForeignKey("Project_ID")]
     public int Project_ID { get; set; }
 
 
@@ -199,9 +201,9 @@ public class Project_Results
 
     [Key]
     public int Project_Result_ID { get; set; }
+    [ForeignKey("Project_ID")]
     public Projects Project { get; set; } = null!;
     [Required]
-    [ForeignKey("Project_ID")]
     public int Project_ID { get; set; }
 
 
@@ -233,10 +235,11 @@ public class Project_Delivarables
 {
 
     [Key]
+    [Column("Project_Deliverable_ID")]
     public int Project_Deliverables_ID { get; set; }
-    public Projects Project { get; set; } = null!;
-    [Required]
     [ForeignKey("Project_ID")]
+    public Projects? Project { get; set; }
+    [Required]
     public int Project_ID { get; set; }
 
 
@@ -252,7 +255,7 @@ public class Project_Delivarables
 
     public int Created_By_ID { get; set; }
 
-    public int Created_By_Name { get; set; }
+    public string? Created_By_Name { get; set; }
 
     public DateTime Date { get; set; }
    
