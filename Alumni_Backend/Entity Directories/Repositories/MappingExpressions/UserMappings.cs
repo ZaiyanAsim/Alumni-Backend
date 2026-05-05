@@ -17,10 +17,12 @@ namespace Entity_Directories.Repositories.MappingExpressions
                 Individual_Academic_ID=i.Individual_Institution_ID??"N/A",
                 Individual_Name = i.Individual_Name,
                 Individual_Email = i.Individual_Email,
+                Individual_Current_Organization = i.Individual_Current_Organization,
                 Individual_Current_Industry = i.Individual_Current_Industry,
                 Individual_Current_Role = i.Individual_Current_Role,
                 noMentorships = i.Individual_Mentorship_Count,
                 noSponsorships = i.Individual_Sponsorship_Count,
+
                 Program = i.Academic_Details
                .OrderByDescending(a => a.Individual_Academic_Graduation_Year)
                .Select(a => new ProgramInfoDTO

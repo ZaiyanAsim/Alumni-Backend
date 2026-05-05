@@ -7,7 +7,7 @@ namespace Alumni_Portal.RAID.Services.Email
         public static string BuildSubject(RequestDTO dto)
         {
 
-            return $"[{dto.Request_Type_Value}] [{dto.Project_Academic_ID}] {dto.Project_Name} · {dto.Individual_Academic_ID}";
+            return $"[{dto.Request_Type_Value}] [{dto.Project_Academic_ID}] {dto.Project_Name} · {dto.Individual_Institution_ID}";
 
         }
 
@@ -43,7 +43,7 @@ namespace Alumni_Portal.RAID.Services.Email
                 Row("Email", dto.Individual_Email) +
                 Row("Contact", dto.Individual_Contact_Number) +
                 LinkRow("LinkedIn", dto.Individual_LinkedIn_Url) +
-                Row("Academic ID", dto.Individual_Academic_ID) +
+                Row("Institution ID", dto.Individual_Institution_ID) +
                 Row("Status", dto.Is_Individual_Registered ? "Registered alumnus" : "External applicant", isLast: true);
 
             var hasOrg = dto.Is_Organization && !string.IsNullOrWhiteSpace(dto.Organization_Name);

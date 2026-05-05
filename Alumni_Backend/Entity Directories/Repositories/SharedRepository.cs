@@ -19,10 +19,10 @@ namespace Alumni_Portal.Entity_Directories.Repositories
             _projectContext = project_context;
         }
 
-        public async Task<int> Individual_Exists_Async(string individualInstitutionID)
+        public async Task<int> Individual_Exists_Async(string individualInstitutionID, string email="")
         {
             int Individual_ID = await _individualContext.Individuals.
-                 Where(i => i.Individual_Institution_ID == individualInstitutionID)
+                 Where(i => i.Individual_Institution_ID == individualInstitutionID && (string.IsNullOrEmpty(email) || i.Individual_Email == email))
                  .Select(i => i.Individual_ID).FirstOrDefaultAsync();
 
             return Individual_ID;

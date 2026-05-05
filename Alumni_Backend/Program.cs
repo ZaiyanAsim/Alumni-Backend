@@ -1,3 +1,4 @@
+using Alumni_Portal.Auth.Configuration;
 using Alumni_Portal.Engagement.Services;
 using Alumni_Portal.Entity_Directories;
 using Alumni_Portal.Exceptions;
@@ -20,6 +21,8 @@ using StackExchange.Redis;
 using System.Text;
 using System.Text.Json;
 using Users.Infrastructure;
+using Alumni_Portal.Auth.Services;
+using Alumni_Portal.Auth;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,6 +34,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddJwtAuthentication(builder.Configuration);
+builder.Services.AddAlumniJwtAuthentication(builder.Configuration);
 builder.Services.AddScoped<ITenantService, TenantService>();
 //builder.Services.AddScoped<FileService>();
 builder.Services.AddHttpContextAccessor();
@@ -60,7 +64,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<AttachmentService>();
 builder.Services.AddScoped<RequestProcessing>();
-
+builder.Services.AddScoped<LoginMainService>();
+builder.Services.AddScoped<AuthRepository>();
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis")));
@@ -120,6 +125,7 @@ builder.Services.AddRAIDInfrastructure(builder.Configuration);
 //Main chal lon ga bhai. Main chal lon ga bhai. Main chal lon ga. Main chal lon ga. Main cha
 
 //HttpClient
+
 
 builder.Services.AddHttpClient("AuthorizedRAIDClient", client =>
 {

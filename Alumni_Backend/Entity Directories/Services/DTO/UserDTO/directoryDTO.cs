@@ -33,7 +33,8 @@ namespace Entity_Directories.Services.DTO
         
         public string? Individual_Current_Industry { get; set; }
 
-        
+        public string? Individual_Current_Organization { get; set; }
+
         public string? Individual_Current_Role { get; init; }
 
         public ProgramInfoDTO? Program { get; init; }

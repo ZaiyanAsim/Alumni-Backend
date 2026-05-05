@@ -18,7 +18,7 @@ namespace Alumni_Portal.Engagement.Services.DTO
         public bool Is_Individual_Registered { get; set; }
 
         public int? Individual_ID { get; set; }
-        public string? Individual_Academic_ID { get; set; }
+        public string? Individual_Institution_ID { get; set; }
 
         public string? Individual_Name { get; set; }
         public string? Individual_Email { get; set; }
