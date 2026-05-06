@@ -223,9 +223,11 @@ public class Project_Results
 
     public string? Result_Tags { get; set; }
 
-    public int Created_By_ID { get; set; }
+    public DateTime Date { get; set; }
 
-    public int Created_By_Name { get; set; }
+    public int? Created_By_ID { get; set; }
+
+    public string? Created_By_Name { get; set; }
 
 
 }

@@ -53,6 +53,21 @@ namespace Alumni_Portal.Profiles.DTO
     public record UpdateDescriptionRequest(string Project_Description);
     public record AddAttachmentLinkRequest(string Title, string Url, string? Description);
 
+    public class ProjectRequestDTO
+    {
+        public int Request_ID { get; set; }
+        public string? Request_Type_Value { get; set; }
+        public int? Individual_ID { get; set; }
+        public string? Individual_Name { get; set; }
+        public string? Individual_Email { get; set; }
+        public string? Individual_Contact_Number { get; set; }
+        public string? Individual_LinkedIn_Url { get; set; }
+        public string? Motivation_Statement { get; set; }
+        public string? Status_Value { get; set; }
+        public bool Is_Individual_Registered { get; set; }
+        public DateTime Created_At { get; set; }
+    }
+
 
     public class MemberDTO
     {
@@ -126,7 +141,6 @@ namespace Alumni_Portal.Profiles.DTO
     public class ProjectResultsDTO
     {
         public int Result_ID { get; set; }
-        public int Seq_Number { get; set; }
         public required string Title { get; set; }
         public string? Description { get; set; }
 
@@ -142,6 +156,8 @@ namespace Alumni_Portal.Profiles.DTO
         public string? Tags { get; set; }
 
         public string? Link { get; set; }
+
+        public DateTime Date { get; set; }
 
         public IFormFile? Image { get; set; }
     }

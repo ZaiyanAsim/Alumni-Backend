@@ -9,13 +9,16 @@ public class ProfileProjectController : ControllerBase
 {
     private readonly ProjectProfileReadService _readService;
     private readonly ProjectProfileUpdateService _updateService;
+    private readonly ProjectRequestService _requestService;
 
     public ProfileProjectController(
         ProjectProfileReadService readService,
-        ProjectProfileUpdateService updateService)
+        ProjectProfileUpdateService updateService,
+        ProjectRequestService requestService)
     {
         _readService = readService;
         _updateService = updateService;
+        _requestService = requestService;
     }
 
     // ── Full profile ──────────────────────────────────────────────────────────
@@ -175,6 +178,29 @@ public class ProfileProjectController : ControllerBase
     public async Task<IActionResult> DeleteProjectDeliverable(int deliverableId)
     {
         await _updateService.DeleteProjectDeliverable(deliverableId);
+        return Ok();
+    }
+
+    // ── Requests ──────────────────────────────────────────────────────────────
+
+    [HttpGet("{projectId}/requests")]
+    public async Task<IActionResult> GetProjectRequests(int projectId, CancellationToken ct)
+    {
+        var requests = await _requestService.GetRequestsAsync(projectId, ct);
+        return Ok(new { data = requests });
+    }
+
+    [HttpPatch("requests/{requestId}/accept")]
+    public async Task<IActionResult> AcceptProjectRequest(int requestId, CancellationToken ct)
+    {
+        await _requestService.AcceptRequestAsync(requestId, ct);
+        return Ok();
+    }
+
+    [HttpDelete("requests/{requestId}")]
+    public async Task<IActionResult> RejectProjectRequest(int requestId, CancellationToken ct)
+    {
+        await _requestService.RejectRequestAsync(requestId, ct);
         return Ok();
     }
 }

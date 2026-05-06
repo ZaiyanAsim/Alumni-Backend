@@ -127,11 +127,11 @@ public class ProjectUpdateRepo
         existing.Result_Description = dto.Description;
         existing.Result_Type_Value = dto.Type_Value!;
         existing.Result_Image_Url = dto.Image_Url;
-        existing.Result_Seq_Number = dto.Seq_Number;
         existing.Result_Metric_Value = dto.MetricValue;
         existing.Result_Metric_Label = dto.MetricLabel;
         existing.Result_Link = dto.Link;
         existing.Result_Tags = dto.Tags;
+        existing.Date = dto.Date;
         await _context.SaveChangesAsync();
     }
 

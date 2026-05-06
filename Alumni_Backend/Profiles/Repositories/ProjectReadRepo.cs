@@ -115,11 +115,10 @@ namespace Alumni_Portal.Profiles.Repositories
             return await _projectDbContext.Project_Results
                 .AsNoTracking()
                 .Where(r => r.Project_ID == projectId)
-                .OrderByDescending(r => r.Result_Seq_Number)
+                .OrderBy(r => r.Project_Result_ID)
                 .Select(r => new ProjectResultsDTO
                 {
                     Result_ID = r.Project_Result_ID,
-                    Seq_Number = r.Result_Seq_Number ?? 0,
                     Title = r.Result_Title,
                     Description = r.Result_Description!,
                     Type_Value = r.Result_Type_Value!,
@@ -128,6 +127,7 @@ namespace Alumni_Portal.Profiles.Repositories
                     Link = r.Result_Link!,
                     Tags = r.Result_Tags!,
                     Image_Url = r.Result_Image_Url!,
+                    Date = r.Date,
                 })
                 .ToListAsync();
         }
