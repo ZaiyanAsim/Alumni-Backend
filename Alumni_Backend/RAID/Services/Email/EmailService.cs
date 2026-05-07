@@ -51,6 +51,7 @@ namespace Alumni_Portal.RAID.Services
             var subject = RequestNotificationEmailBuilder.BuildSubject(dto);
             var body = RequestNotificationEmailBuilder.BuildBody(dto, requestId);
 
+            _logger.LogInformation("Sending admin notification for request {RequestId} to {Email}", requestId, dto.Individual_Email);
             try
             {
                 await SendMailAsync(6, new List<string> { dto.Individual_Email }, new List<string>(), subject, body);

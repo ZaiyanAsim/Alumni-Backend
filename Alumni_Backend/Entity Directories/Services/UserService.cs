@@ -62,7 +62,7 @@ namespace Entity_Directories.Services
 
         public async Task CreateUser(NewUserDTO newUser)
         {
-            int id = await _sharedRepo.Individual_Exists_Async(newUser.Institution_ID);
+            int id = await _sharedRepo.Individual_Exists_Async(newUser.Institution_ID, newUser.Email);
 
             if (id != 0)
             {

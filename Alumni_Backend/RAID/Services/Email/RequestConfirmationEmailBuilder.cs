@@ -6,7 +6,7 @@ namespace Alumni_Portal.RAID.Services.Email
     {
         internal static string BuildSubject(RequestDTO dto)
         {
-            return $"Request Received: [{dto.Request_Type_Value}] [{dto.Project_Academic_ID}] {dto.Project_Name}";
+            return $"Request Received: [{dto.Request_Type_Value}] [{dto.Project_Academic_ID}] [{dto.Project_Name}]";
 
         }
 

@@ -19,6 +19,7 @@ namespace Alumni_Portal.Infrastructure.Data_Models
         public int? Individual_Type_ID { get; init; }
         public required string Individual_Type_Value { get; init; }
 
+        public string? password_hash { get; set; }
         public string? Logo_Url { get; init; }
         public required string Individual_Name { get; init; }
         public string? Individual_Email { get; init; }
@@ -34,6 +35,7 @@ namespace Alumni_Portal.Infrastructure.Data_Models
 
         public string? Individual_Current_Industry { get; init; }
 
+        public string? Individual_Current_Organization { get; init; }
         public string? Individual_Current_Role { get; init; }
 
         public int? Progress_ID { get; set; }

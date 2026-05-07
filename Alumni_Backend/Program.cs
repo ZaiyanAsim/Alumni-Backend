@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Alumni_Portal.Auth.Configuration;
 using Alumni_Portal.Engagement.Services;
 using Alumni_Portal.Entity_Directories;
 using Alumni_Portal.Exceptions;
@@ -18,6 +19,8 @@ using Shared.Custom_Exceptions;
 using Shared.TenantService;
 using StackExchange.Redis;
 using Users.Infrastructure;
+using Alumni_Portal.Auth.Services;
+using Alumni_Portal.Auth;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +32,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddJwtAuthentication(builder.Configuration);
+builder.Services.AddAlumniJwtAuthentication(builder.Configuration);
 builder.Services.AddScoped<ITenantService, TenantService>();
 //builder.Services.AddScoped<FileService>();
 builder.Services.AddHttpContextAccessor();
@@ -46,6 +50,9 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<AttachmentService>();
 builder.Services.AddScoped<RequestProcessing>();
+builder.Services.AddScoped<LoginMainService>();
+builder.Services.AddScoped<AuthRepository>();
+
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis")));
 
