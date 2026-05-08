@@ -1,4 +1,5 @@
-﻿using Alumni_Portal.FileUploads.DTO;
+
+using Alumni_Portal.FileUploads.DTO;
 using System.Globalization;
 using System.Numerics;
 
@@ -7,7 +8,7 @@ namespace Alumni_Portal.Profiles.DTO
 {
     public class ProjectProfileResponseDTO
     {
-        
+
         public  MetaDataDTO Header_Data  { get; set; }
         public List<MemberDTO>? Members { get; set; } =new List<MemberDTO>();
 
@@ -19,30 +20,67 @@ namespace Alumni_Portal.Profiles.DTO
 
         public List<TechStackDTO>? TechStack { get; set; } = new List<TechStackDTO>();
 
+    public List<MethodologyDTO>? Methodologies { get; set; } = new List<MethodologyDTO>();
+
     }
 
     public class TechStackDTO
     {
+        public int StackId { get; set; }
         public string? Layer { get; set; }
         public string Technology { get; set; } = string.Empty;
+    }
+
+    public class MethodologyDTO
+    {
+        public int MethodologyId { get; set; }
+        public string Value { get; set; } = string.Empty;
+    }
+
+    public class IndividualSearchDTO
+    {
+        public int Individual_ID { get; set; }
+        public string Individual_Name { get; set; } = string.Empty;
+        public string? Individual_Email { get; set; }
+        public string? Logo_Url { get; set; }
+        public bool Individual_Is_Alumni { get; set; }
+    }
+
+    public record AddMemberRequest(int IndividualId, string Role);
+    public record AddSponsorRequest(int IndividualId);
+    public record AddTechStackRequest(string Technology_Value, string? Layer_Value);
+    public record AddMethodologyRequest(string MethodologyValue);
+    public record UpdateDescriptionRequest(string Project_Description);
+    public record AddAttachmentLinkRequest(string Title, string Url, string? Description);
+
+    public class ProjectRequestDTO
+    {
+        public int Request_ID { get; set; }
+        public string? Request_Type_Value { get; set; }
+        public int? Individual_ID { get; set; }
+        public string? Individual_Name { get; set; }
+        public string? Individual_Email { get; set; }
+        public string? Individual_Contact_Number { get; set; }
+        public string? Individual_LinkedIn_Url { get; set; }
+        public string? Motivation_Statement { get; set; }
+        public string? Status_Value { get; set; }
+        public bool Is_Individual_Registered { get; set; }
+        public DateTime Created_At { get; set; }
     }
 
 
     public class MemberDTO
     {
-
+        public int MapId { get; set; }
         public int Individual_ID { get; set; }
         public string Name { get; set; }
-
         public string? role { get; set; }
-
         public string? email { get; set; }
-
         public string? Logo_Url { get; set; }
 
-
-        public MemberDTO(int individual_ID, string name, string? role, string? email, string? logo_Url)
+        public MemberDTO(int mapId, int individual_ID, string name, string? role, string? email, string? logo_Url)
         {
+            MapId = mapId;
             Individual_ID = individual_ID;
             Name = name;
             this.role = role;
@@ -92,17 +130,17 @@ namespace Alumni_Portal.Profiles.DTO
         public bool? Is_Mentorship_Available { get; init; }
 
         public bool? Is_Sponsorship_Available { get; init; }
+
         public string Logo_Url { get; set; }
 
         public string Video_Url { get; set; }
 
     }
-   
 
 
     public class ProjectResultsDTO
     {
-        public int Seq_Number { get; set; }
+        public int Result_ID { get; set; }
         public required string Title { get; set; }
         public string? Description { get; set; }
 
@@ -119,12 +157,14 @@ namespace Alumni_Portal.Profiles.DTO
 
         public string? Link { get; set; }
 
+        public DateTime Date { get; set; }
+
         public IFormFile? Image { get; set; }
     }
 
     public class ProjectDeliverablesDTO
     {
-        
+        public int Deliverable_ID { get; set; }
         public required string Title { get; set; }
         public string? Description { get; set; }
 
@@ -137,9 +177,6 @@ namespace Alumni_Portal.Profiles.DTO
 
         public DateTime Date { get; set; }
     }
-
-
-   
 
 
 

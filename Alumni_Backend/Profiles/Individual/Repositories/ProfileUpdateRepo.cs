@@ -30,6 +30,7 @@ namespace Alumni_Portal.Profiles.Individual.Repositories
             var mapper = new Mappings().WorkExperienceMapping(workExperience).Compile();
             var updatedWorkExperience = mapper(details);
 
+            await _context.SaveChangesAsync();
         }
     }
 }

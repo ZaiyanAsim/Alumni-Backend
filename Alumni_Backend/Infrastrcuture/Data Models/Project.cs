@@ -222,7 +222,7 @@ public class Project_Results
     public string? Result_Link { get; set; }
 
     public string? Result_Tags { get; set; }
-
+    public DateTime Date { get; set; }
     public int Created_By_ID { get; set; }
 
     public int Created_By_Name { get; set; }
@@ -235,7 +235,7 @@ public class Project_Delivarables
 {
 
     [Key]
-    public int Project_Deliverables_ID { get; set; }
+    public int Project_Deliverable_ID { get; set; }
     public Projects Project { get; set; } = null!;
     [Required]
     [ForeignKey("Project_ID")]

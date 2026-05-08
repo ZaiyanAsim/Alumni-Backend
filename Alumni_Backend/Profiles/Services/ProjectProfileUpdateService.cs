@@ -1,7 +1,8 @@
-﻿using Alumni_Portal.FileUploads;
+using Alumni_Portal.FileUploads;
 using Alumni_Portal.FileUploads.DTO;
 using Alumni_Portal.Infrastructure.Data_Models;
 using Alumni_Portal.Profiles.DTO;
+using Shared.Custom_Exceptions.ExceptionClasses;
 
 
 public class ProjectProfileUpdateService
@@ -9,7 +10,6 @@ public class ProjectProfileUpdateService
     private readonly AttachmentService _attachmentService;
     private readonly ProjectUpdateRepo _repo;
     private readonly FileService _fileService;
-   
 
     public ProjectProfileUpdateService(AttachmentService attachmentService, ProjectUpdateRepo repo, FileService fileService)
     {
@@ -18,13 +18,43 @@ public class ProjectProfileUpdateService
         _fileService = fileService;
     }
 
+    // ── Description ───────────────────────────────────────────────────────────
+
+    public Task UpdateDescriptionAsync(int projectId, string description)
+        => _repo.UpdateDescriptionAsync(projectId, description);
+
+    // ── Members ───────────────────────────────────────────────────────────────
+
+    public Task<int> AddMemberAsync(int projectId, int individualId, string role)
+        => _repo.AddMemberAsync(projectId, individualId, role);
+
+    public Task RemoveMemberAsync(int mapId)
+        => _repo.RemoveMemberAsync(mapId);
+
+    // ── Tech Stack ─────────────────────────────────────────────────────────────
+
+    public Task<int> AddTechStackAsync(int projectId, string technologyValue, string? layerValue)
+        => _repo.AddTechStackAsync(projectId, technologyValue, layerValue);
+
+    public Task RemoveTechStackAsync(int stackId)
+        => _repo.RemoveTechStackAsync(stackId);
+
+    // ── Methodologies ─────────────────────────────────────────────────────────
+
+    public Task<int> AddMethodologyAsync(int projectId, string methodologyValue)
+        => _repo.AddMethodologyAsync(projectId, methodologyValue);
+
+    public Task RemoveMethodologyAsync(int methodologyId)
+        => _repo.RemoveMethodologyAsync(methodologyId);
+
+    // ── Attachments ───────────────────────────────────────────────────────────
 
     public async Task<string> AddProjectAttachment(int projectId, DocumentUploadRequestDTO newAttachment)
     {
         var response = await _attachmentService.UploadDocument(newAttachment);
 
         if (!string.IsNullOrEmpty(response.ErrorMessage))
-            return response.ErrorMessage;
+            throw new ValidationException(response.ErrorMessage);
 
         var attachment = new Project_Attachments
         {
@@ -35,102 +65,77 @@ public class ProjectProfileUpdateService
             Attachment_File_Location = response.File.Attachment_File_Location,
             Attachment_Size = response.File.Attachment_Size,
             Attachment_Date = DateTime.UtcNow,
+            Progress_ID = 1,
+            Progress_Value = "Active",
+            Status_ID = 1,
+            Status_Value = "Active",
+            Created_By_ID = 1,
+            Created_By_Name = "Admin",
+            Created_Date = DateTime.UtcNow,
         };
 
         await _repo.AddProjectAttachmentAsync(attachment);
-        return "Attachment added successfully.";
+        return response.File.Attachment_File_Location;
     }
 
-
-    
-    //private async Task<UploadResponseDTO> UploadProjectMediaAsync(MediaUploadRequestDTO mediaData)
-    //{
-    //    return await _fileService.UploadMedia(mediaData);
-    //}
-
-   
-    public async Task<List<FileUploadDTO>>  AddProjectMediaAsync(int projectId, List<IFormFile> media)
+    public async Task AddAttachmentLinkAsync(int projectId, string title, string url, string? description)
     {
-
-        var response = await _fileService.UploadMedia(media);
-
-        if (!string.IsNullOrEmpty(response.errorMessage) || response.errors.Any())
-        {
-            throw new Exception(response.errorMessage ?? string.Join(", ", response.errors));
-        }
-
-        var mediaRecords = response.UploadedFiles.Select(f => new Project_Media
+        var attachment = new Project_Attachments
         {
             Project_ID = projectId,
-            Media_Date = f.Media_Date,
-            Media_Title = f.Media_Title,
-            Media_File_Name = f.Media_File_Name,
-            Media_File_Location = f.Media_File_Location,
-        }).ToList();
-
-
-        await _repo.AddProjectMediaAsync(mediaRecords);
-
-        return response.UploadedFiles;
+            Attachment_Title = title,
+            Attachment_Description = description,
+            Attachment_File_Location = url,
+            Attachment_File_Name = title,
+            Attachment_Size = 0,
+            Attachment_Date = DateTime.UtcNow,
+            Progress_ID = 1,
+            Progress_Value = "Active",
+            Status_ID = 1,
+            Status_Value = "Active",
+            Created_By_ID = 1,
+            Created_By_Name = "Admin",
+            Created_Date = DateTime.UtcNow,
+        };
+        await _repo.AddProjectAttachmentAsync(attachment);
     }
 
-    public async Task DeleteProjectAttachment(int attachmentId) =>
-        await _repo.DeleteProjectAttachmentAsync(attachmentId);
+    public Task DeleteProjectAttachment(int attachmentId)
+        => _repo.DeleteProjectAttachmentAsync(attachmentId);
 
     // ── Results ───────────────────────────────────────────────────────────────
 
     public async Task AddProjectResult(int projectId, ProjectResultsDTO dto)
-
-
     {
-
-        try
+        if (dto.Image != null)
         {
-            if (dto.Image != null)
-            {
-                var files = new List<IFormFile> { dto.Image };
-
-                var response = await AddProjectMediaAsync(projectId, files);
-
-
-
-                dto.Image_Url = response[0].Media_File_Location;
-
-
-            }
-
-            await _repo.AddProjectResultAsync(projectId, dto);
+            var response = await _fileService.UploadMedia(new List<IFormFile> { dto.Image });
+            dto.Image_Url = response.UploadedFiles.FirstOrDefault()?.Media_File_Location;
         }
+        await _repo.AddProjectResultAsync(projectId, dto);
+    }
 
-        catch (Exception ex)
+    public async Task UpdateProjectResult(int projectId, int resultId, ProjectResultsDTO dto)
+    {
+        if (dto.Image != null)
         {
-            throw;
+            var response = await _fileService.UploadMedia(new List<IFormFile> { dto.Image });
+            dto.Image_Url = response.UploadedFiles.FirstOrDefault()?.Media_File_Location;
         }
-        }
+        await _repo.UpdateProjectResultAsync(resultId, dto);
+    }
 
+    public Task DeleteProjectResult(int resultId)
+        => _repo.DeleteProjectResultAsync(resultId);
 
+    // ── Deliverables ──────────────────────────────────────────────────────────
 
+    public Task AddProjectDeliverable(int projectId, ProjectDeliverablesDTO dto)
+        => _repo.AddProjectDeliverableAsync(projectId, dto);
 
+    public Task UpdateProjectDeliverable(int projectId, int deliverableId, ProjectDeliverablesDTO dto)
+        => _repo.UpdateProjectDeliverableAsync(deliverableId, dto);
 
-
-
-
-
-
-
-
-
-
-    public async Task DeleteProjectResult(int resultId) =>
-        await _repo.DeleteProjectResultAsync(resultId);
-
-
-    public async Task AddProjectDeliverable(int projectId, ProjectDeliverablesDTO dto) =>
-        await _repo.AddProjectDeliverableAsync(projectId, dto);
-
-    
-    public async Task DeleteProjectDeliverable(int deliverableId) =>
-        await _repo.DeleteProjectDeliverableAsync(deliverableId);
+    public Task DeleteProjectDeliverable(int deliverableId)
+        => _repo.DeleteProjectDeliverableAsync(deliverableId);
 }
-
-

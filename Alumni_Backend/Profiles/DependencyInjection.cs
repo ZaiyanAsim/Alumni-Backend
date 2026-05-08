@@ -36,6 +36,7 @@ namespace Alumni_Portal.Profiles
             services.AddScoped<ProjectProfileUpdateService>();
             services.AddScoped<ProjectUpdateRepo>();
 
+            services.AddScoped<ProjectRequestService>();
 
             return services;
         }

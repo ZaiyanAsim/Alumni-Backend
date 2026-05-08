@@ -21,8 +21,8 @@ namespace Alumni_Portal.Profiles.Repositories.MappingExpressions
                 Project_Description = p.Project_Description,
                 Is_Mentored = p.Is_Mentored,
                 Is_Sponsored = p.Is_Sponsored,
-                Is_Mentorship_Available = p.Is_Mentorship_Available,
-                Is_Sponsorship_Available = p.Is_Sponsorship_Available,
+                Is_Mentorship_Available = p.Is_Mentored,
+                Is_Sponsorship_Available = p.Is_Sponsored,
             };
 
         public static Expression<Func<Project_Attachments, ProjectDocumentDto>> ToProjectDocumentDto =>
@@ -42,7 +42,6 @@ namespace Alumni_Portal.Profiles.Repositories.MappingExpressions
         public static Expression<Func<Project_Results, ProjectResultsDTO>> ToProjectResultsDTO =>
             r => new ProjectResultsDTO
             {
-                Seq_Number = r.Result_Seq_Number ?? 0,
                 Title = r.Result_Title,
                 Description = r.Result_Description!,
                 Type_Value = r.Result_Type_Value!,
@@ -82,11 +81,11 @@ namespace Alumni_Portal.Profiles.Repositories.MappingExpressions
                     Result_Description = dto.Description,
                     Result_Type_Value = dto.Type_Value!,
                     Result_Image_Url = dto.Image_Url,
-                    Result_Seq_Number = dto.Seq_Number,
                     Result_Metric_Value = dto.MetricValue,
                     Result_Metric_Label = dto.MetricLabel,
                     Result_Link = dto.Link,
                     Result_Tags = dto.Tags,
+                    Date = dto.Date,
                 };
 
             public static Project_Delivarables ToDeliverableModel(int projectId, ProjectDeliverablesDTO dto) =>
