@@ -10,10 +10,10 @@
         public int Event_ID { get; set; }
 
        
-        public int Event_Type_ID { get; set; }
+        public int? Event_Type_ID { get; set; }
 
 
-        public string Event_Type_Value { get; set; }
+        public string ?Event_Type_Value { get; set; }
 
         public string Event_Name { get; set; } 
         

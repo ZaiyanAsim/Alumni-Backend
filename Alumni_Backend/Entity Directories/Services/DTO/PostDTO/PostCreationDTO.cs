@@ -40,7 +40,8 @@ namespace Entity_Directories.Services.DTO
 
         public string? Post_Type_Value { get; set; }
         public required string Post_Title { get; set; }
-
+        
+       
         public Boolean Is_Banner_Post { get; set; } = true;
         public string? Post_Tags { get; set; }
         public string? Post_Content { get; set; }
