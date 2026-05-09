@@ -98,9 +98,8 @@ public class Project_Attachments
     [Key]
     [Column("Project_Attachment_ID")]
     public int Project_Attachment_ID { get; set; }
-    public Projects Project { get; set; } = null!;
-    [Required]
     [ForeignKey("Project_ID")]
+    public Projects? Project { get; set; }
     public int Project_ID { get; set; }
 
     [Column("Attachment_Date")]
@@ -164,9 +163,8 @@ public class Project_Media
     [Key]
     public int Project_Media_ID { get; set; }
 
-    public Projects Project { get; set; } = null!;
-    [Required]
     [ForeignKey("Project_ID")]
+    public Projects? Project { get; set; }
     public int Project_ID { get; set; }
 
 
@@ -201,9 +199,8 @@ public class Project_Results
 
     [Key]
     public int Project_Result_ID { get; set; }
-    public Projects Project { get; set; } = null!;
-    [Required]
     [ForeignKey("Project_ID")]
+    public Projects? Project { get; set; }
     public int Project_ID { get; set; }
 
 
@@ -223,9 +220,9 @@ public class Project_Results
 
     public string? Result_Tags { get; set; }
     public DateTime Date { get; set; }
-    public int Created_By_ID { get; set; }
+    public int? Created_By_ID { get; set; }
 
-    public int Created_By_Name { get; set; }
+    public string? Created_By_Name { get; set; }
 
 
 }
@@ -236,9 +233,8 @@ public class Project_Delivarables
 
     [Key]
     public int Project_Deliverable_ID { get; set; }
-    public Projects Project { get; set; } = null!;
-    [Required]
     [ForeignKey("Project_ID")]
+    public Projects? Project { get; set; }
     public int Project_ID { get; set; }
 
 
@@ -252,12 +248,11 @@ public class Project_Delivarables
     public required string Deliverable_Category_Value { get; set; }
 
 
-    public int Created_By_ID { get; set; }
+    public int? Created_By_ID { get; set; }
 
-    public int Created_By_Name { get; set; }
+    public string? Created_By_Name { get; set; }
 
     public DateTime Date { get; set; }
-   
 
 
 }

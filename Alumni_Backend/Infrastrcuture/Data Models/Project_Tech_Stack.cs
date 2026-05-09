@@ -10,9 +10,8 @@ namespace Alumni_Portal.Infrastrcuture.Data_Models
         [Key]
         public int Project_Stack_ID { get; set; }
 
-        public Projects Project { get; set; } = null!;
-        [Required]
         [ForeignKey("Project_ID")]
+        public Projects? Project { get; set; }
         public int Project_ID { get; set; }
                                            
         public int? Layer_ID { get; set; }                 

@@ -186,7 +186,7 @@ namespace Alumni_Portal.Profiles.Repositories
             return await _individualDbContext.Individuals
                 .AsNoTracking()
                 .Where(i => (i.Individual_Name.Contains(query) || (i.Individual_Email != null && i.Individual_Email.Contains(query)))
-                            && (!sponsorSearch    || i.Individual_Is_Alumni)
+                            && (!sponsorSearch    || i.Individual_Is_Alumni == true)
                             && (!supervisorSearch || i.Individual_Type_Value.ToLower() == "supervisor")
                             && (!memberSearch     || i.Individual_Type_Value.ToLower() == "student"))
                 .Select(i => new IndividualSearchDTO
@@ -195,7 +195,7 @@ namespace Alumni_Portal.Profiles.Repositories
                     Individual_Name = i.Individual_Name,
                     Individual_Email = i.Individual_Email,
                     Logo_Url = i.Logo_Url,
-                    Individual_Is_Alumni = i.Individual_Is_Alumni,
+                    Individual_Is_Alumni = i.Individual_Is_Alumni ?? false,
                 })
                 .Take(20)
                 .ToListAsync(ct);

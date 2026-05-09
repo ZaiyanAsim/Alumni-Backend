@@ -3,6 +3,7 @@ using Alumni_Portal.Infrastructure.Persistance;
 using Alumni_Portal.Infrastructure.Persistence;
 using Alumni_Portal.Profiles.DTO;
 using Microsoft.EntityFrameworkCore;
+using Shared.Custom_Exceptions.ExceptionClasses;
 
 namespace Alumni_Portal.Profiles.Services
 {
@@ -47,7 +48,18 @@ namespace Alumni_Portal.Profiles.Services
                 ?? throw new Exception("Request not found.");
 
             bool isSupervisor = string.Equals(request.Request_Type_Value, "Supervisor", StringComparison.OrdinalIgnoreCase);
+            bool isMentor = !isSupervisor;
             string role = isSupervisor ? "Supervisor" : "Mentor";
+
+            if (isMentor)
+            {
+                bool mentorExists = await _projectContext.Project_Individuals
+                    .AnyAsync(pi => pi.Project_ID == request.Project_ID &&
+                                    pi.Individual_Role.ToLower() == "mentor", ct);
+
+                if (mentorExists)
+                    throw new ValidationException("This project already has a mentor. Remove the existing mentor before assigning a new one.");
+            }
 
             if (request.Individual_ID.HasValue)
             {
@@ -58,6 +70,14 @@ namespace Alumni_Portal.Profiles.Services
                     Individual_Role = role,
                 };
                 await _projectContext.Project_Individuals.AddAsync(member, ct);
+
+                if (isMentor)
+                {
+                    await _projectContext.Projects
+                        .Where(p => p.Project_ID == request.Project_ID)
+                        .ExecuteUpdateAsync(s => s.SetProperty(p => p.Is_Mentored, true), ct);
+                }
+
                 await _projectContext.SaveChangesAsync(ct);
             }
 

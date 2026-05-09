@@ -85,7 +85,7 @@ namespace Alumni_Portal.Auth.Services
                 Email = individual.Individual_Email ?? string.Empty,
                 IndividualName = individual.Individual_Name,
                 InstitutionId = individual.Individual_Institution_ID,
-                IsAlumni = individual.Individual_Is_Alumni,
+                IsAlumni = individual.Individual_Is_Alumni ?? false,
                 Role = individual.Individual_Type_Value
             };
 

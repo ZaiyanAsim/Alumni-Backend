@@ -54,9 +54,45 @@ namespace Alumni_Portal.Infrastructure.Persistence
             );
 
             modelBuilder.Entity<Project_Individuals>()
-            .HasOne(pi => pi.Project)
-            .WithMany(p => p.Project_Individuals)
-             .HasForeignKey(pi => pi.Project_ID);
+                .HasOne(pi => pi.Project)
+                .WithMany(p => p.Project_Individuals)
+                .HasForeignKey(pi => pi.Project_ID);
+
+            modelBuilder.Entity<Project_Tech_Stack>()
+                .HasOne(t => t.Project)
+                .WithMany()
+                .HasForeignKey(t => t.Project_ID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Project_Methodologies>()
+                .HasOne<Projects>()
+                .WithMany()
+                .HasForeignKey(m => m.Project_ID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Project_Attachments>()
+                .HasOne(a => a.Project)
+                .WithMany()
+                .HasForeignKey(a => a.Project_ID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Project_Media>()
+                .HasOne(m => m.Project)
+                .WithMany()
+                .HasForeignKey(m => m.Project_ID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Project_Results>()
+                .HasOne(r => r.Project)
+                .WithMany()
+                .HasForeignKey(r => r.Project_ID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Project_Delivarables>()
+                .HasOne(d => d.Project)
+                .WithMany()
+                .HasForeignKey(d => d.Project_ID)
+                .OnDelete(DeleteBehavior.Cascade);
 
             
 

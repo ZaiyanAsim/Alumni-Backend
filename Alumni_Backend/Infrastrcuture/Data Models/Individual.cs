@@ -27,7 +27,7 @@ namespace Alumni_Portal.Infrastructure.Data_Models
         public string? Individual_Contact_Number_Secondary { get; init; }
 
 
-        public required bool Individual_Is_Alumni { get; init; }
+        public bool? Individual_Is_Alumni { get; init; }
 
 
         public int? Individual_Mentorship_Count { get; init; }
