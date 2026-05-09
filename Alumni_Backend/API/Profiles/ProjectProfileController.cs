@@ -1,7 +1,10 @@
-﻿using Alumni_Portal.FileUploads.DTO;
+﻿using Alumni_Portal.Auth.Configuration;
+using Alumni_Portal.Auth.Services.FeaturePermission;
+using Alumni_Portal.FileUploads.DTO;
 using Alumni_Portal.Profiles.DTO;
 using Alumni_Portal.Profiles.Services;
 using Microsoft.AspNetCore.Mvc;
+using Alumni_Portal.Engagement.Services.DTO;
 
 [Route("api/Admin/profile-project")]
 [ApiController]
@@ -21,7 +24,7 @@ public class ProfileProjectController : ControllerBase
         _requestService = requestService;
     }
 
-    // ── Full profile ──────────────────────────────────────────────────────────
+  
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProjectProfile(int id, CancellationToken ct)
@@ -30,7 +33,7 @@ public class ProfileProjectController : ControllerBase
         return Ok(new { data = profile });
     }
 
-    // ── Individual search ─────────────────────────────────────────────────────
+  
 
     [HttpGet("individuals/search")]
     public async Task<IActionResult> SearchIndividuals([FromQuery] string q, [FromQuery] string? role, CancellationToken ct)
@@ -39,7 +42,8 @@ public class ProfileProjectController : ControllerBase
         return Ok(new { data = results });
     }
 
-    // ── Description ───────────────────────────────────────────────────────────
+    
+   
 
     [HttpPatch("{projectId}/description")]
     public async Task<IActionResult> UpdateDescription(int projectId, [FromBody] UpdateDescriptionRequest body)
@@ -48,7 +52,7 @@ public class ProfileProjectController : ControllerBase
         return Ok();
     }
 
-    // ── Members ───────────────────────────────────────────────────────────────
+  
 
     [HttpPost("{projectId}/members/byid")]
     public async Task<IActionResult> AddMember(int projectId, [FromBody] AddMemberRequest body)
@@ -64,7 +68,7 @@ public class ProfileProjectController : ControllerBase
         return Ok();
     }
 
-    // ── Sponsor ────────────────────────────────────────────────────────────────
+    
 
     [HttpPost("{projectId}/sponsor")]
     public async Task<IActionResult> AddSponsor(int projectId, [FromBody] AddSponsorRequest body)
@@ -80,7 +84,7 @@ public class ProfileProjectController : ControllerBase
         return Ok();
     }
 
-    // ── Tech Stack ─────────────────────────────────────────────────────────────
+  
 
     [HttpPost("{projectId}/tech-stack")]
     public async Task<IActionResult> AddTechStack(int projectId, [FromBody] AddTechStackRequest body)
@@ -96,7 +100,7 @@ public class ProfileProjectController : ControllerBase
         return Ok();
     }
 
-    // ── Methodologies ─────────────────────────────────────────────────────────
+
 
     [HttpPost("{projectId}/methodologies")]
     public async Task<IActionResult> AddMethodology(int projectId, [FromBody] AddMethodologyRequest body)
@@ -112,7 +116,7 @@ public class ProfileProjectController : ControllerBase
         return Ok();
     }
 
-    // ── Attachments ───────────────────────────────────────────────────────────
+  
 
     [HttpPost("{projectId}/attachments/upload")]
     public async Task<IActionResult> UploadAttachment(int projectId, [FromForm] DocumentUploadRequestDTO document)
@@ -198,9 +202,9 @@ public class ProfileProjectController : ControllerBase
     }
 
     [HttpDelete("requests/{requestId}")]
-    public async Task<IActionResult> RejectProjectRequest(int requestId, CancellationToken ct)
+    public async Task<IActionResult> RejectProjectRequest([FromBody] RequestRejectionDTO dto,int requestId, CancellationToken ct)
     {
-        await _requestService.RejectRequestAsync(requestId, ct);
+        await _requestService.RejectRequestAsync(dto, ct);
         return Ok();
     }
 }

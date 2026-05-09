@@ -13,7 +13,7 @@ namespace Alumni_Portal.Auth.Configuration
             this IServiceCollection services,
             IConfiguration configuration)
         {
-
+       
             services.Configure<JwtSettings>(
                 configuration.GetSection("AlumniPortalJwt"));
 

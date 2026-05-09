@@ -3,6 +3,7 @@ using System.Text.Json;
 using Alumni_Portal.RAID.Login.DTO;
 using System.Net.Http.Headers;
 using System.Text;
+using Alumni_Portal.Auth.Services.DTO;
 
 namespace Alumni_Portal.RAID.Login
 {
@@ -14,11 +15,15 @@ namespace Alumni_Portal.RAID.Login
 
         private string _accessToken;
         private DateTime _tokenExpiry;
+        private readonly ILogger<LoginService> _logger;
+        private HttpClient _httpClient;
 
-        public LoginService(IHttpClientFactory httpClientFactory)
+
+        public LoginService(IHttpClientFactory httpClientFactory,ILogger<LoginService>logger)
         {
             _httpClientFactory = httpClientFactory;
-          
+            _httpClient = _httpClientFactory.CreateClient("AuthorizedRAIDClient");
+            _logger = logger;
         }
 
         public async Task<string> GetEmailAuthorizationToken()
@@ -28,7 +33,7 @@ namespace Alumni_Portal.RAID.Login
                 return _accessToken;
             }
 
-            var client = _httpClientFactory.CreateClient("AuthorizedRAIDClient");
+         
 
             var loginRequest = new
             {
@@ -42,7 +47,7 @@ namespace Alumni_Portal.RAID.Login
                 "application/json"
             );
 
-            var response = await client.PostAsync("Auth/login", content);
+            var response = await this._httpClient.PostAsync("Auth/login", content);
             response.EnsureSuccessStatusCode();
 
             var responseString = await response.Content.ReadAsStringAsync();
@@ -55,6 +60,55 @@ namespace Alumni_Portal.RAID.Login
 
             return _accessToken;
         }
+
+
+
+
+
+        public async Task<AdminAuthInfoDataDTO?> GetAdminPermissionsAsync(string jwtToken)
+        {
+            try
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, "Auth/Info");
+                request.Headers.Authorization =
+                    new AuthenticationHeaderValue("Bearer", jwtToken);
+
+                var response = await this._httpClient.SendAsync(request);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogWarning("Admin Auth Info returned {Status}", response.StatusCode);
+                    return null;
+                }
+
+                var result = await response.Content
+                    .ReadFromJsonAsync<AdminAuthInfoResponseDTO>();
+
+                if (result?.Data == null)
+                {
+                    _logger.LogWarning("Admin Auth Info response was null or empty");
+                    return null;
+                }
+
+                // ✅ Log the full response as JSON
+                _logger.LogInformation("Admin Auth Info response: {Data}",
+                    JsonSerializer.Serialize(result.Data));
+
+                // ✅ Or log specific fields
+                _logger.LogInformation(
+                    "Permissions fetched for {UserName} — [{Permissions}]",
+                    result.Data.User_Name,
+                    string.Join(", ", result.Data.FeaturePermissionKeys));
+
+                return result.Success == true ? result.Data : null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to fetch permissions from third party");
+                return null;
+            }
+        }
+
 
     }
 
