@@ -1,4 +1,8 @@
+using Alumni_Portal.Auth;
 using Alumni_Portal.Auth.Configuration;
+using Alumni_Portal.Auth.Services;
+using Alumni_Portal.Auth.Services.FeaturePermission;
+using Alumni_Portal.Auth.Services.ResourceOwnership;
 using Alumni_Portal.Engagement.Services;
 using Alumni_Portal.Entity_Directories;
 using Alumni_Portal.Exceptions;
@@ -21,13 +25,15 @@ using StackExchange.Redis;
 using System.Text;
 using System.Text.Json;
 using Users.Infrastructure;
-using Alumni_Portal.Auth.Services;
-using Alumni_Portal.Auth;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+//New
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped<AdminPermissionService>();
+builder.Services.AddScoped<ProjectOwnershipService>();
 
 builder.Services.AddControllers();
 
@@ -150,9 +156,9 @@ app.UseRouting();
 app.UseCors("DevCors");
 //app.UseHttpsRedirection();
 app.UseExceptionHandler();
-//app.UseAuthentication();
+app.UseAuthentication();
 //app.UseMiddleware<TenantMiddleware>();
-//app.UseAuthorization();
+app.UseAuthorization();
 app.UseStaticFiles();
 
 app.MapControllers();

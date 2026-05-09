@@ -3,6 +3,7 @@ using Alumni_Portal.RAID.DTO;
 using Alumni_Portal.RAID.Login;
 using Alumni_Portal.RAID.Login.DTO;
 using Alumni_Portal.RAID.Services.Email;
+using Alumni_Portal.Engagement.Services.DTO;
 using RabbitMQ.Client;
 using System.Net.Http.Headers;
 using System.Text;
@@ -62,6 +63,7 @@ namespace Alumni_Portal.RAID.Services
               
                 _logger.LogError(ex, "CRITICAL: Failed to send admin notification for request {RequestId}", requestId);
                 throw;
+                
             }
         }
 
@@ -89,6 +91,29 @@ namespace Alumni_Portal.RAID.Services
         }
 
 
+        private async Task SendUserProjectRequestRejectionAsync(RequestRejectionDTO dto)
+        {
+            if (string.IsNullOrWhiteSpace(dto.Individual_Email))
+            {
+                _logger.LogWarning("No user email on request {RequestId} — Failed to send Rejection Email");
+                return;
+            }
+
+            var subject = RequestRejectionEmailBuilder.BuildSubject(dto);
+            var body = RequestRejectionEmailBuilder.BuildBody(dto);
+
+            try
+            {
+                await SendMailAsync(6, new List<string> { dto.Individual_Email }, new List<string>(), subject, body);
+                _logger.LogInformation("User confirmation sent to {Email} for request {RequestId}", dto.Individual_Email, dto.Request_ID);
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, "Failed to send user confirmation to {Email} for request {RequestId} — request is still saved", dto.Individual_Email, dto.Request_ID);
+                throw;
+            }
+        }
 
 
 

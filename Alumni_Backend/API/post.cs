@@ -1,4 +1,6 @@
-﻿using Alumni_Portal.FileUploads;
+﻿using Alumni_Portal.Auth.Configuration;
+using Alumni_Portal.Auth.Services.FeaturePermission;
+using Alumni_Portal.FileUploads;
 using Alumni_Portal.Infrastructure.Data_Models;
 using Entity_Directories.Services;
 using Entity_Directories.Services;
@@ -9,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 
 
@@ -49,6 +52,9 @@ namespace Admin.Controllers
 
         [HttpGet]
 
+        [Authorize(AuthenticationSchemes = "AdminBearer")]
+        [RequirePermission(Permissions.HIVED_POSTS_VIEW)]
+
         public async Task<ActionResult> GetPosts([FromQuery] PostFilters filters, int _page, int _size)
         {
 
@@ -57,7 +63,8 @@ namespace Admin.Controllers
            
 
         }
-
+        [RequireAdminOrAlumni]
+        [RequirePermission(Permissions.HIVED_POSTS_ADD)]
         [HttpGet("tagging-search")]
         public async Task<ActionResult> PostTaggingSearch([FromQuery] PostTaggingSearchFilters filters)
 
@@ -72,9 +79,13 @@ namespace Admin.Controllers
 
         }
 
+         
 
-
+        
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "AdminBearer")]
+        [RequirePermission(Permissions.HIVED_POSTS_ADD)]
+
         public async Task<IActionResult> CreatePost([FromBody] PostCreationDTO postDetails)
         {
 

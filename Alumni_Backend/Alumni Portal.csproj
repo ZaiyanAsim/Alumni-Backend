@@ -31,7 +31,6 @@
 
   <ItemGroup>
     <Folder Include="API\Profiles\ProjectProfile\" />
-    <Folder Include="Notifications\" />
     <Folder Include="Profiles\Services\Abstractions\" />
   </ItemGroup>
 

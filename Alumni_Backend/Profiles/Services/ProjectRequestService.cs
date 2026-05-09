@@ -1,7 +1,9 @@
+using Alumni_Portal.Engagement.Services.DTO;
 using Alumni_Portal.Infrastrcuture.Data_Models;
 using Alumni_Portal.Infrastructure.Persistance;
 using Alumni_Portal.Infrastructure.Persistence;
 using Alumni_Portal.Profiles.DTO;
+using Alumni_Portal.RAID.Services;
 using Microsoft.EntityFrameworkCore;
 using Shared.Custom_Exceptions.ExceptionClasses;
 
@@ -9,13 +11,15 @@ namespace Alumni_Portal.Profiles.Services
 {
     public class ProjectRequestService
     {
+        private readonly EmailService _emailService;
         private readonly SharedDbContext _sharedContext;
         private readonly ProjectDbContext _projectContext;
 
-        public ProjectRequestService(SharedDbContext sharedContext, ProjectDbContext projectContext)
+        public ProjectRequestService(SharedDbContext sharedContext, ProjectDbContext projectContext, EmailService emailService)
         {
             _sharedContext = sharedContext;
             _projectContext = projectContext;
+            _emailService = emailService;
         }
 
         public async Task<List<ProjectRequestDTO>> GetRequestsAsync(int projectId, CancellationToken ct = default)
@@ -98,11 +102,24 @@ namespace Alumni_Portal.Profiles.Services
             await _sharedContext.SaveChangesAsync(ct);
         }
 
-        public async Task RejectRequestAsync(int requestId, CancellationToken ct = default)
+        public async Task RejectRequestAsync(RequestRejectionDTO dto, CancellationToken ct = default)
         {
             var request = await _sharedContext.Requests
-                .FirstOrDefaultAsync(r => r.Request_ID == requestId, ct)
+                .FirstOrDefaultAsync(r => r.Request_ID == dto.Request_ID, ct)
                 ?? throw new Exception("Request not found.");
+
+            if (string.IsNullOrWhiteSpace(dto.Individual_Email))
+                throw new Exception($"Request {dto.Request_ID} has no associated email address. Rejection email not sent and request has not been deleted.");
+
+            try
+            {
+                await _emailService.SendUserProjectRequestRejectionAsync(dto);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to send rejection email for request {dto.Request_ID}. The request has not been deleted.", ex);
+            }
+
             _sharedContext.Requests.Remove(request);
             await _sharedContext.SaveChangesAsync(ct);
         }
