@@ -12,10 +12,10 @@ namespace Alumni_Portal.Auth.Services.ResourceOwnership
             _context = context;
         }
         
-        public async Task<bool> IsOwnerAsync(string projectAcademicId, int individualId)
+        public async Task<bool> IsOwnerAsync(int projectId, int individualId)
         {
             return await _context.Projects
-                .Where(p => p.Project_Academic_ID == projectAcademicId)
+                .Where(p => p.Project_ID == projectId)
                 .Join(
                     _context.Project_Individuals,
                     project => project.Project_ID,
@@ -30,7 +30,7 @@ namespace Alumni_Portal.Auth.Services.ResourceOwnership
                 )
                 .AnyAsync(x =>
                     x.projectIndividual.Individual_ID == individualId &&
-                    x.individual.Individual_Is_Alumni == true);
+                    x.individual.Individual_Is_Alumni == false);
         }
 
 
