@@ -9,6 +9,7 @@ using Entity_Directories.Services.Abstractions;
 using Entity_Directories.Repositories;
 using Entity_Directories.Services;
 using Alumni_Portal.Entity_Directories.Repositories;
+using Alumni_Portal.Infrastructure.Persistance;
 namespace Alumni_Portal.Entity_Directories
 {
     public static class DependencyInjection
@@ -19,7 +20,11 @@ namespace Alumni_Portal.Entity_Directories
             services.AddDbContext<IndividualDbContext>(options =>
             options.UseSqlServer(
                 configuration.GetConnectionString("DefaultConnection")
+            ));
 
+            services.AddDbContext<RegistrationDbContext>(options =>
+            options.UseSqlServer(
+                configuration.GetConnectionString("DefaultConnection")
             ));
 
             services.AddDbContext<ProjectDbContext>(options =>
@@ -32,13 +37,21 @@ namespace Alumni_Portal.Entity_Directories
                 configuration.GetConnectionString("DefaultConnection")
             ));
 
+            services.AddDbContext<EventDbContext>(options =>
+            options.UseSqlServer(
+                configuration.GetConnectionString("DefaultConnection")
+            ));
+
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<IPostRepository, PostRepository>();
+            services.AddScoped<IEventRepository, EventRepository>();
 
             services.AddScoped<UserService>();
+            services.AddScoped<RegistrationRequestService>();
             services.AddScoped<ProjectService>();
             services.AddScoped<PostService>();
+            services.AddScoped<EventService>();
             services.AddScoped<SharedRepository>();
 
             return services;

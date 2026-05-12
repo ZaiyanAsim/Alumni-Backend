@@ -125,6 +125,7 @@ builder.Services.AddProjectsInfrastructure(builder.Configuration);
 builder.Services.AddEntityDirectoriesInfrastructure(builder.Configuration);
 builder.Services.AddFeedInfrastructure(builder.Configuration);
 builder.Services.AddProjectFeedInfrastructure(builder.Configuration);
+builder.Services.AddScoped<Alumni_Portal.OpenPortalPages.Stats.PortalStatsRepository>();
 builder.Services.AddProfileInfrastructure(builder.Configuration);
 builder.Services.AddTenantConfigurationInfrastructure(builder.Configuration);
 builder.Services.AddRAIDInfrastructure(builder.Configuration);

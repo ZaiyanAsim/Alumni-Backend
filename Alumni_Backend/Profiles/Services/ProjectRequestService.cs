@@ -52,8 +52,9 @@ namespace Alumni_Portal.Profiles.Services
                 ?? throw new Exception("Request not found.");
 
             bool isSupervisor = string.Equals(request.Request_Type_Value, "Supervisor", StringComparison.OrdinalIgnoreCase);
-            bool isMentor = !isSupervisor;
-            string role = isSupervisor ? "Supervisor" : "Mentor";
+            bool isMentor     = string.Equals(request.Request_Type_Value, "Mentor",     StringComparison.OrdinalIgnoreCase);
+            bool isSponsor    = string.Equals(request.Request_Type_Value, "Sponsor",    StringComparison.OrdinalIgnoreCase);
+            string role = isSupervisor ? "Supervisor" : isSponsor ? "Sponsor" : "Mentor";
 
             if (isMentor)
             {
@@ -63,6 +64,16 @@ namespace Alumni_Portal.Profiles.Services
 
                 if (mentorExists)
                     throw new ValidationException("This project already has a mentor. Remove the existing mentor before assigning a new one.");
+            }
+
+            if (isSponsor)
+            {
+                bool sponsorExists = await _projectContext.Project_Individuals
+                    .AnyAsync(pi => pi.Project_ID == request.Project_ID &&
+                                    pi.Individual_Role.ToLower() == "sponsor", ct);
+
+                if (sponsorExists)
+                    throw new ValidationException("This project already has a sponsor. Remove the existing sponsor before assigning a new one.");
             }
 
             if (request.Individual_ID.HasValue)
@@ -76,11 +87,14 @@ namespace Alumni_Portal.Profiles.Services
                 await _projectContext.Project_Individuals.AddAsync(member, ct);
 
                 if (isMentor)
-                {
                     await _projectContext.Projects
                         .Where(p => p.Project_ID == request.Project_ID)
                         .ExecuteUpdateAsync(s => s.SetProperty(p => p.Is_Mentored, true), ct);
-                }
+
+                if (isSponsor)
+                    await _projectContext.Projects
+                        .Where(p => p.Project_ID == request.Project_ID)
+                        .ExecuteUpdateAsync(s => s.SetProperty(p => p.Is_Sponsored, true), ct);
 
                 await _projectContext.SaveChangesAsync(ct);
             }

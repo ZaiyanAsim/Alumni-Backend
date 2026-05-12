@@ -13,10 +13,11 @@ namespace Entity_Directories.Repositories.MappingExpressions
 
             return i => new userDirectoryDTO
             {
-                Individual_ID=i.Individual_ID,
-                Individual_Academic_ID=i.Individual_Institution_ID??"N/A",
+                Individual_ID = i.Individual_ID,
+                Individual_Academic_ID = i.Individual_Institution_ID ?? "N/A",
                 Individual_Name = i.Individual_Name,
                 Individual_Email = i.Individual_Email,
+                Individual_Contact_Number = i.Individual_Contact_Number_Primary,
                 Individual_Current_Organization = i.Individual_Current_Organization,
                 Individual_Current_Industry = i.Individual_Current_Industry,
                 Individual_Current_Role = i.Individual_Current_Role,
@@ -27,52 +28,96 @@ namespace Entity_Directories.Repositories.MappingExpressions
                .OrderByDescending(a => a.Individual_Academic_Graduation_Year)
                .Select(a => new ProgramInfoDTO
                {
-                   Program = a.Individual_Academic_Program_Value??"N/A",
+                   Academic_ID = a.Individual_Academic_ID,
+                   Program = a.Individual_Academic_Program_Value ?? "N/A",
+                   Enrollment_Year = a.Individual_Academic_Enrollment_Year,
                    Graduation_Year = a.Individual_Academic_Graduation_Year,
                    Department = a.Individual_Academic_Department_Value,
-                   
+                   Designation = a.Individual_Academic_Designation,
                }).FirstOrDefault()
-
             };
         }
 
         public static Expression<Func<Individuals, userDirectoryDTO>> StudentMapping()
         {
             return i => new userDirectoryDTO
-
             {
                 Individual_ID = i.Individual_ID,
-                Individual_Academic_ID = i.Individual_Institution_ID??"N/A",
+                Individual_Academic_ID = i.Individual_Institution_ID ?? "N/A",
                 Individual_Name = i.Individual_Name,
                 Individual_Email = i.Individual_Email,
+                Individual_Contact_Number = i.Individual_Contact_Number_Primary,
                 Program = i.Academic_Details
                             .Select(a => new ProgramInfoDTO
                             {
-                                Program = a.Individual_Academic_Program_Value??"N/A",
+                                Academic_ID = a.Individual_Academic_ID,
+                                Program = a.Individual_Academic_Program_Value ?? "N/A",
+                                Enrollment_Year = a.Individual_Academic_Enrollment_Year,
                                 Graduation_Year = a.Individual_Academic_Graduation_Year,
                                 Department = a.Individual_Academic_Department_Value,
+                                Designation = a.Individual_Academic_Designation,
                             }).FirstOrDefault(),
             };
-
-        } 
+        }
 
         public static Expression<Func<Individuals, userDirectoryDTO>> SupervisorMapping()
         {
             return i => new userDirectoryDTO
-
             {
                 Individual_ID = i.Individual_ID,
-                Individual_Academic_ID = i.Individual_Institution_ID?? "N/A",
+                Individual_Academic_ID = i.Individual_Institution_ID ?? "N/A",
                 Individual_Name = i.Individual_Name,
                 Individual_Email = i.Individual_Email,
+                Individual_Contact_Number = i.Individual_Contact_Number_Primary,
                 Program = i.Academic_Details
                             .Select(a => new ProgramInfoDTO
                             {
+                                Academic_ID = a.Individual_Academic_ID,
                                 Department = a.Individual_Academic_Department_Value,
                                 Designation = a.Individual_Academic_Designation,
                             }).FirstOrDefault()
             };
+        }
 
+        public static Expression<Func<Individuals, userDirectoryDTO>> ProfileMapping()
+        {
+            return i => new userDirectoryDTO
+            {
+                Individual_ID = i.Individual_ID,
+                Individual_Academic_ID = i.Individual_Institution_ID ?? "N/A",
+                Individual_Name = i.Individual_Name,
+                Individual_Email = i.Individual_Email,
+                Individual_Contact_Number = i.Individual_Contact_Number_Primary,
+                Individual_Current_Organization = i.Individual_Current_Organization,
+                Individual_Current_Industry = i.Individual_Current_Industry,
+                Individual_Current_Role = i.Individual_Current_Role,
+                noMentorships = i.Individual_Mentorship_Count,
+                noSponsorships = i.Individual_Sponsorship_Count,
+
+                Program = i.Academic_Details
+                    .OrderByDescending(a => a.Individual_Academic_Enrollment_Year)
+                    .Select(a => new ProgramInfoDTO
+                    {
+                        Academic_ID = a.Individual_Academic_ID,
+                        Department = a.Individual_Academic_Department_Value,
+                        Designation = a.Individual_Academic_Designation,
+                    }).FirstOrDefault(),
+
+                Programs = i.Academic_Details
+                    .OrderBy(a => a.Individual_Academic_Enrollment_Year)
+                    .Select(a => new ProgramInfoDTO
+                    {
+                        Academic_ID       = a.Individual_Academic_ID,
+                        Program           = a.Individual_Academic_Program_Value,
+                        Enrollment_Year   = a.Individual_Academic_Enrollment_Year,
+                        Graduation_Year   = a.Individual_Academic_Graduation_Year,
+                        Department        = a.Individual_Academic_Department_Value,
+                        Designation       = a.Individual_Academic_Designation,
+                        Institution_Name  = a.Individual_Academic_Institution_Name,
+                        Institution_Type  = a.Individual_Academic_Institution_Type,
+                        Is_Ongoing        = a.Individual_Academic_Is_Ongoing,
+                    }).ToList()
+            };
         }
 
         public static Expression<Func<NewUserDTO, Individuals>> NewUserMapping()
@@ -101,6 +146,9 @@ namespace Entity_Directories.Repositories.MappingExpressions
                 Individual_Academic_Graduation_Year = a.Graduation_Year,
                 Individual_Academic_Designation = a.Designation_Value,
                 Individual_Academic_Designation_ID = a.Designation_ID,
+                Individual_Academic_Institution_Name = a.Institution_Name,
+                Individual_Academic_Institution_Type = a.Institution_Type,
+                Individual_Academic_Is_Ongoing = a.Is_Ongoing,
              }).ToList()
             : null  
             };

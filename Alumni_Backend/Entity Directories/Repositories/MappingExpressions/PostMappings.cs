@@ -42,7 +42,9 @@ namespace Entity_Directories.Repositories.MappingExpressions
                 Created_By_Name = i.Created_By_Name,
                 Created_Date = i.Created_Date,
                 Published_Date = i.Published_Date,
-                Pusbished_By_Name = i.Created_By_Name ?? "Admin"
+                Pusbished_By_Name = i.Created_By_Name ?? "Admin",
+                Post_Association_ID = i.Post_Association_ID,
+                Post_Association_Value = i.Post_Association_Value
             };
 
         }

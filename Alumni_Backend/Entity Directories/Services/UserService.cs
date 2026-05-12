@@ -22,8 +22,35 @@ namespace Entity_Directories.Services
         public async Task<userDirectoryDTO?> GetUser(string individualInstitutionID)
         {
             return await _userRepo.GetUserByInstitutionID(individualInstitutionID);
-            
         }
+
+        public async Task<userDirectoryDTO?> GetUserByNumericId(int individualId)
+        {
+            return await _userRepo.GetUserByNumericId(individualId);
+        }
+
+        public async Task UpdateUserAsync(int individualId, UpdateUserDTO dto)
+        {
+            await _userRepo.UpdateAsync(individualId, dto);
+        }
+
+        public Task UpdateAcademicAsync(int academicId, UpdateAcademicDTO dto)
+            => _userRepo.UpdateAcademicAsync(academicId, dto);
+
+        public Task<int> AddAcademicAsync(int individualId, AddAcademicDTO dto)
+            => _userRepo.AddAcademicAsync(individualId, dto);
+
+        public Task DeleteAcademicAsync(int academicId)
+            => _userRepo.DeleteAcademicAsync(academicId);
+
+        public Task<List<WorkExperienceDTO>> GetWorkExperienceAsync(int individualId)
+            => _userRepo.GetWorkExperienceAsync(individualId);
+
+        public Task<int> AddWorkExperienceAsync(int individualId, AddWorkExperienceDTO dto)
+            => _userRepo.AddWorkExperienceAsync(individualId, dto);
+
+        public Task DeleteWorkExperienceAsync(int workExpId)
+            => _userRepo.DeleteWorkExperienceAsync(workExpId);
 
         public async Task<PaginatedResult<userDirectoryDTO>> GetUsersPaginated(string type, int _page, int _limit)
         {

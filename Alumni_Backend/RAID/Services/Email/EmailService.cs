@@ -91,7 +91,7 @@ namespace Alumni_Portal.RAID.Services
         }
 
 
-        private async Task SendUserProjectRequestRejectionAsync(RequestRejectionDTO dto)
+        public async Task SendUserProjectRequestRejectionAsync(RequestRejectionDTO dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Individual_Email))
             {

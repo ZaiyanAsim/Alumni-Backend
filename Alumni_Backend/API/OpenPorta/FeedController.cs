@@ -30,6 +30,14 @@ namespace Alumni_Portal.API.OpenPortal
             return Ok(result);
         }
 
+        [HttpGet("post/{id:int}")]
+        public async Task<IActionResult> GetPostById(int id, CancellationToken ct)
+        {
+            var post = await _feedService.GetPostByIdAsync(id, ct);
+            if (post is null) return NotFound();
+            return Ok(post);
+        }
+
         [HttpGet("banner-posts")]
         public async Task<IActionResult> GetBannerPosts([FromQuery] bool takeLimit, [FromQuery] List<int>? postTypeIds, CancellationToken ct)
         {

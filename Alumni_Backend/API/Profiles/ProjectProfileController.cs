@@ -35,6 +35,13 @@ public class ProfileProjectController : ControllerBase
 
   
 
+    [HttpGet("individual/{individualId}/projects")]
+    public async Task<IActionResult> GetProjectsByIndividual(int individualId, CancellationToken ct)
+    {
+        var projects = await _readService.GetProjectsByIndividualAsync(individualId, ct);
+        return Ok(new { data = projects });
+    }
+
     [HttpGet("individuals/search")]
     public async Task<IActionResult> SearchIndividuals([FromQuery] string q, [FromQuery] string? role, CancellationToken ct)
     {

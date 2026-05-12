@@ -41,6 +41,9 @@ namespace Alumni_Portal.Profiles.Services
         public Task<List<IndividualSearchDTO>> SearchIndividualsAsync(string query, string? role = null, CancellationToken ct = default)
             => _repo.SearchIndividualsAsync(query, role, ct);
 
+        public Task<List<IndividualProjectDTO>> GetProjectsByIndividualAsync(int individualId, CancellationToken ct = default)
+            => _repo.GetProjectsByIndividualAsync(individualId, ct);
+
         public async Task<ProjectProfileResponseDTO> GetFullProfileAsync(int projectId, CancellationToken ct = default)
         {
             var header       = await GetHeaderAsync(projectId, ct);

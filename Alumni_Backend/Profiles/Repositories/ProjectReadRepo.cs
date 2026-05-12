@@ -177,6 +177,31 @@ namespace Alumni_Portal.Profiles.Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<IndividualProjectDTO>> GetProjectsByIndividualAsync(int individualId, CancellationToken ct = default)
+        {
+            return await _projectDbContext.Project_Individuals
+                .AsNoTracking()
+                .Where(pi => pi.Individual_ID == individualId)
+                .Join(
+                    _projectDbContext.Projects.AsNoTracking(),
+                    pi => pi.Project_ID,
+                    p => p.Project_ID,
+                    (pi, p) => new IndividualProjectDTO
+                    {
+                        Map_ID               = pi.Project_Individuals_Map_ID,
+                        Project_ID           = p.Project_ID,
+                        Project_Academic_ID  = p.Project_Academic_ID,
+                        Project_Name         = p.Project_Name,
+                        Project_Type         = p.Project_Type_Value,
+                        Project_Year         = p.Project_Year,
+                        Is_Mentored          = p.Is_Mentored,
+                        Is_Sponsored         = p.Is_Sponsored,
+                        Individual_Role      = pi.Individual_Role,
+                    }
+                )
+                .ToListAsync(ct);
+        }
+
         public async Task<List<IndividualSearchDTO>> SearchIndividualsAsync(string query, string? role = null, CancellationToken ct = default)
         {
             bool sponsorSearch    = string.Equals(role, "Sponsor",    StringComparison.OrdinalIgnoreCase);

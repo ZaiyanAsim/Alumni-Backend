@@ -9,7 +9,8 @@
         public List<int>? ProjectTypeIds { get; set; }
         public List<int>? ProjectIndustryIds { get; set; }
 
-        public bool? SeekingMentors { get; set; } 
-        public bool? SeekingSponsors { get; set; } 
+        public bool? SeekingMentors { get; set; }
+        public bool? SeekingSponsors { get; set; }
+        public string? Search { get; set; }
     }
 }

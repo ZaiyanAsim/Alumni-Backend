@@ -7,6 +7,7 @@ using Alumni_Portal.RAID.Login;
 using Alumni_Portal.RAID.Services.Email;
 using Alumni_Portal.RAID.Services;
 using Entity_Directories.Services;
+using Entity_Directories.Services.DTO;
 using Microsoft.IdentityModel.Protocols.Configuration;
 
 namespace Alumni_Portal.Engagement.Services
@@ -45,25 +46,35 @@ namespace Alumni_Portal.Engagement.Services
 
             if (request.Is_Individual_Registered)
             {
-                if (string.IsNullOrWhiteSpace(request.Individual_Institution_ID))
+                userDirectoryDTO? alumniDetails = null;
+
+                if (!string.IsNullOrWhiteSpace(request.Individual_Institution_ID))
+                {
+                    alumniDetails = await _userService.GetUser(request.Individual_Institution_ID);
+
+                    if (alumniDetails is null)
+                        throw new ValidationException(
+                            $"No registered individual found with Institution ID " +
+                            $"'{request.Individual_Institution_ID}'.");
+                }
+                else if (request.Individual_ID.HasValue)
+                {
+                    alumniDetails = await _userService.GetUserByNumericId(request.Individual_ID.Value);
+
+                    if (alumniDetails is null)
+                        throw new ValidationException(
+                            $"No registered individual found with ID '{request.Individual_ID}'.");
+                }
+                else
+                {
                     throw new ArgumentException(
-                        "Individual_Institution_ID is required when Is_Individual_Registered is true.");
-
-                var alumniDetails = await _userService.GetUser(
-                    request.Individual_Institution_ID);
-
-                if (alumniDetails == null)
-                    throw new ValidationException(
-                        $"No registered individual found with Institution ID " +
-                        $"'{request.Individual_Institution_ID}'.");
-
+                        "Either Individual_Institution_ID or Individual_ID is required when Is_Individual_Registered is true.");
+                }
 
                 request.Individual_ID = alumniDetails.Individual_ID;
-                
                 request.Individual_Name = alumniDetails.Individual_Name;
                 request.Individual_Email = alumniDetails.Individual_Email;
-                request.Individual_Contact_Number = null; 
-
+                request.Individual_Contact_Number = null;
 
                 if (request.Is_Organization)
                 {

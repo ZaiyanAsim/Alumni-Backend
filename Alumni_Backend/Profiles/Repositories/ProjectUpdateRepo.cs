@@ -52,8 +52,23 @@ public class ProjectUpdateRepo
     {
         var entry = await _context.Project_Individuals.FindAsync(mapId)
             ?? throw new Exception("Member not found.");
+
+        bool wasMentor  = entry.Individual_Role.Equals("Mentor",  StringComparison.OrdinalIgnoreCase);
+        bool wasSponsor = entry.Individual_Role.Equals("Sponsor", StringComparison.OrdinalIgnoreCase);
+        int projectId   = entry.Project_ID;
+
         _context.Project_Individuals.Remove(entry);
         await _context.SaveChangesAsync();
+
+        if (wasMentor)
+            await _context.Projects
+                .Where(p => p.Project_ID == projectId)
+                .ExecuteUpdateAsync(s => s.SetProperty(p => p.Is_Mentored, false));
+
+        if (wasSponsor)
+            await _context.Projects
+                .Where(p => p.Project_ID == projectId)
+                .ExecuteUpdateAsync(s => s.SetProperty(p => p.Is_Sponsored, false));
     }
 
     // ── Tech Stack ─────────────────────────────────────────────────────────────

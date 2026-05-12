@@ -40,10 +40,12 @@ namespace Entity_Directories.Services.DTO
         public int?    Enrollment_Year { get; init; }
         public int?    Graduation_Year { get; init; }
 
+        public int?    Designation_ID  { get; init; }
+        public string? Designation_Value { get; init; }
 
-        public int?    Designation_ID  {get;init;}
-        public string? Designation_Value {  get; init; }
-
+        public string? Institution_Name { get; init; }
+        public string? Institution_Type { get; init; }
+        public bool?   Is_Ongoing { get; init; }
     }
 
 

@@ -28,19 +28,14 @@ namespace Admin.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(string id)
         {
-            var user = await _userDirectory.GetUser(id);
+            userDirectoryDTO? user = int.TryParse(id, out int numericId)
+                ? await _userDirectory.GetUserByNumericId(numericId)
+                : await _userDirectory.GetUser(id);
+
             if (user == null)
-            {
-                return NotFound(new {message="No user found with this Institution ID"});
-            }
+                return NotFound(new { message = "No user found with this ID" });
 
-            var response = new
-            {
-                data = user
-            };
-
-
-            return Ok(response);
+            return Ok(new { data = user });
         }
 
 
@@ -57,6 +52,62 @@ namespace Admin.Controllers
             
         }
 
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] UpdateUserDTO dto)
+        {
+            userDirectoryDTO? existing = int.TryParse(id, out int numericId)
+                ? await _userDirectory.GetUserByNumericId(numericId)
+                : await _userDirectory.GetUser(id);
+
+            if (existing == null)
+                return NotFound(new { message = "No user found with this ID" });
+
+            await _userDirectory.UpdateUserAsync(existing.Individual_ID, dto);
+            return Ok();
+        }
+
+        [HttpGet("{userId}/work-experience")]
+        public async Task<IActionResult> GetWorkExperience(int userId)
+        {
+            var list = await _userDirectory.GetWorkExperienceAsync(userId);
+            return Ok(new { data = list });
+        }
+
+        [HttpPost("{userId}/work-experience")]
+        public async Task<IActionResult> AddWorkExperience(int userId, [FromBody] AddWorkExperienceDTO dto)
+        {
+            var newId = await _userDirectory.AddWorkExperienceAsync(userId, dto);
+            return Ok(new { data = newId });
+        }
+
+        [HttpDelete("{userId}/work-experience/{workExpId}")]
+        public async Task<IActionResult> DeleteWorkExperience(int userId, int workExpId)
+        {
+            await _userDirectory.DeleteWorkExperienceAsync(workExpId);
+            return Ok();
+        }
+
+        [HttpPost("{userId}/academics")]
+        public async Task<IActionResult> AddAcademic(int userId, [FromBody] AddAcademicDTO dto)
+        {
+            var newId = await _userDirectory.AddAcademicAsync(userId, dto);
+            return Ok(new { data = newId });
+        }
+
+        [HttpPatch("{userId}/academics/{academicId}")]
+        public async Task<IActionResult> UpdateAcademic(int userId, int academicId, [FromBody] UpdateAcademicDTO dto)
+        {
+            await _userDirectory.UpdateAcademicAsync(academicId, dto);
+            return Ok();
+        }
+
+        [HttpDelete("{userId}/academics/{academicId}")]
+        public async Task<IActionResult> DeleteAcademic(int userId, int academicId)
+        {
+            await _userDirectory.DeleteAcademicAsync(academicId);
+            return Ok();
+        }
 
         [HttpPost("create")]
         [Consumes("application/json")]

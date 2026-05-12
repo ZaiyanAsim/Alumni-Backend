@@ -37,20 +37,69 @@ namespace Entity_Directories.Services.DTO
 
         public string? Individual_Current_Role { get; init; }
 
+        public string? Individual_Contact_Number { get; init; }
+
         public ProgramInfoDTO? Program { get; init; }
+        public List<ProgramInfoDTO>? Programs { get; init; }
 
     }
 
 
         
     public class ProgramInfoDTO
-      
     {
+        public int? Academic_ID { get; init; }
         public string? Program { get; set; }
         public string? Department { get; init; }
         public int? Enrollment_Year { get; init; }
         public int? Graduation_Year { get; init; }
         public string? Designation { get; init; }
+        public string? Institution_Name { get; init; }
+        public string? Institution_Type { get; init; }
+        public bool? Is_Ongoing { get; init; }
+    }
+
+    public class UpdateAcademicDTO
+    {
+        public string? Program_Value { get; set; }
+        public string? Department_Value { get; set; }
+        public int? Enrollment_Year { get; set; }
+        public int? Graduation_Year { get; set; }
+        public string? Designation_Value { get; set; }
+        public string? Institution_Name { get; set; }
+        public string? Institution_Type { get; set; }
+        public bool? Is_Ongoing { get; set; }
+    }
+
+    public class AddAcademicDTO
+    {
+        public string? Program_Value { get; set; }
+        public string? Department_Value { get; set; }
+        public int? Enrollment_Year { get; set; }
+        public int? Graduation_Year { get; set; }
+        public string? Designation_Value { get; set; }
+        public string? Institution_Name { get; set; }
+        public string? Institution_Type { get; set; }
+        public bool? Is_Ongoing { get; set; }
+    }
+
+    public class WorkExperienceDTO
+    {
+        public int Work_Experience_ID { get; set; }
+        public string? Job_Title { get; set; }
+        public string? Company_Name { get; set; }
+        public DateTime? Start_Date { get; set; }
+        public DateTime? End_Date { get; set; }
+        public bool? Is_Current { get; set; }
+    }
+
+    public class AddWorkExperienceDTO
+    {
+        public string? Job_Title { get; set; }
+        public string? Company_Name { get; set; }
+        public DateTime? Start_Date { get; set; }
+        public DateTime? End_Date { get; set; }
+        public bool? Is_Current { get; set; }
     }
 
 
@@ -71,6 +120,15 @@ namespace Entity_Directories.Services.DTO
         
       
         
+
+    public class UpdateUserDTO
+    {
+        public string? Name { get; set; }
+        public string? Email { get; set; }
+        public string? Contact_Number { get; set; }
+        public string? Current_Industry { get; set; }
+        public string? Current_Role { get; set; }
+    }
 
     public class BaseUserDTO
     {

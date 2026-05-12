@@ -15,17 +15,16 @@
 
         public string ?Event_Type_Value { get; set; }
 
-        public string Event_Name { get; set; } 
-        
-        public string Event_Description { get; set; }
-     
+        public string Event_Name { get; set; } = null!;
+
+        public string? Event_Description { get; set; }
+
         public DateTime Event_Date { get; set; }
 
+        public string? Event_Status { get; set; }
 
-        public string Event_Status { get; set; }
-
-        public string Event_Logo_URL { get; set; }
-        public string Event_Image_URL { get; set; }
+        public string? Event_Logo_URL { get; set; }
+        public string? Event_Image_URL { get; set; }
 
         
         public DateTime Created_At { get; set; } = DateTime.UtcNow;

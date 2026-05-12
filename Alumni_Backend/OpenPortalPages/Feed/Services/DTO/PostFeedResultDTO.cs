@@ -56,10 +56,11 @@
         public string? Post_Tags { get; set; }
         public string? Post_Content { get; set; }
         public DateTime Published_Date { get; set; }
+        public string? Created_By_Name { get; set; }
+        public int? Post_Association_ID { get; set; }
+        public string? Post_Association_Value { get; set; }
         public List<PostMentionsDTO> Mentions { get; set; } = [];
         public List<PostMediaDTO> Media { get; set; } = [];
-
-        
     }
 
 

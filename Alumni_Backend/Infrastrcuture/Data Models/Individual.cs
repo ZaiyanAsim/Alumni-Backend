@@ -70,6 +70,10 @@ namespace Alumni_Portal.Infrastructure.Data_Models
         public int? Individual_Academic_Designation_ID { get; set; }
         public string? Individual_Academic_Designation { get; set; }
 
+        public string? Individual_Academic_Institution_Name { get; set; }
+        public string? Individual_Academic_Institution_Type { get; set; }
+        public bool? Individual_Academic_Is_Ongoing { get; set; }
+
         public int? Progress_ID { get; set; }
         public string? Progress_Value { get; set; }
 

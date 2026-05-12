@@ -55,12 +55,15 @@ namespace Entity_Directories.Services.DTO
 
         public int? Created_By_ID { get; set; }
 
-
         public string? Created_By_Name { get; set; }
 
         public DateTime? Created_Date { get; set; }
 
         public DateTime Published_Date { get; set; }
+
+        public int? Post_Association_ID { get; set; }
+
+        public string? Post_Association_Value { get; set; }
 
     }
 

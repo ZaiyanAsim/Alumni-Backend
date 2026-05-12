@@ -64,7 +64,6 @@ namespace Admin.Controllers
 
         }
         [RequireAdminOrAlumni]
-        [RequirePermission(Permissions.HIVED_POSTS_ADD)]
         [HttpGet("tagging-search")]
         public async Task<ActionResult> PostTaggingSearch([FromQuery] PostTaggingSearchFilters filters)
 
@@ -83,7 +82,7 @@ namespace Admin.Controllers
 
         
         [HttpPost]
-        [Authorize(AuthenticationSchemes = "AdminBearer")]
+        [RequireAdminOrAlumni]
         [RequirePermission(Permissions.HIVED_POSTS_ADD)]
 
         public async Task<IActionResult> CreatePost([FromBody] PostCreationDTO postDetails)

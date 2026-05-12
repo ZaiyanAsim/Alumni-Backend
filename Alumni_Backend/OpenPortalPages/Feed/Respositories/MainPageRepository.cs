@@ -55,6 +55,9 @@ namespace Alumni_Portal.OpenPortalPages.MainPage.Respositories
                     p.Post_Tags,
                     p.Post_Content,
                     p.Published_Date,
+                    p.Created_By_Name,
+                    p.Post_Association_ID,
+                    p.Post_Association_Value,
                 })
                 .ToListAsync(ct);
 
@@ -118,6 +121,9 @@ namespace Alumni_Portal.OpenPortalPages.MainPage.Respositories
                 Post_Tags = p.Post_Tags,
                 Post_Content = p.Post_Content,
                 Published_Date = p.Published_Date,
+                Created_By_Name = p.Created_By_Name,
+                Post_Association_ID = p.Post_Association_ID,
+                Post_Association_Value = p.Post_Association_Value,
                 Mentions = mentionsByPost.TryGetValue(p.Post_ID, out var mList) ? mList : new(),
                 Media = mediaByPost.TryGetValue(p.Post_ID, out var mdList) ? mdList : new(),
             }).ToList();
@@ -143,6 +149,63 @@ namespace Alumni_Portal.OpenPortalPages.MainPage.Respositories
         //        .ToListAsync();
         //    return posts;
         //}
+
+        public async Task<PostFeedItemDTO?> GetPostByIdAsync(int id, CancellationToken ct = default)
+        {
+            var post = await _context.Posts
+                .AsNoTracking()
+                .Where(p => p.Post_ID == id)
+                .Select(p => new
+                {
+                    p.Post_ID,
+                    p.Post_Type_Value,
+                    p.Post_Title,
+                    p.Post_Tags,
+                    p.Post_Content,
+                    p.Published_Date,
+                    p.Created_By_Name,
+                })
+                .FirstOrDefaultAsync(ct);
+
+            if (post is null) return null;
+
+            var media = await _context.Post_Media
+                .AsNoTracking()
+                .Where(m => m.Post_ID == id)
+                .Select(m => new PostMediaDTO
+                {
+                    Post_Media_ID      = m.Post_Media_ID,
+                    Media_Title        = m.Media_Title,
+                    Media_Description  = m.Media_Description,
+                    Media_File_Location = m.Media_File_Location,
+                    Media_File_Name    = m.Media_File_Name,
+                })
+                .ToListAsync(ct);
+
+            var mentions = await _context.Post_Mentions
+                .AsNoTracking()
+                .Where(m => m.Post_ID == id)
+                .Select(m => new PostMentionsDTO
+                {
+                    Mention_ID   = m.Mention_ID,
+                    Mention_Type = m.Mention_Type,
+                    Mention_Name = m.Mention_Name,
+                })
+                .ToListAsync(ct);
+
+            return new PostFeedItemDTO
+            {
+                Post_ID          = post.Post_ID,
+                Post_Type_Value  = post.Post_Type_Value,
+                Post_Title       = post.Post_Title,
+                Post_Tags        = post.Post_Tags,
+                Post_Content     = post.Post_Content,
+                Published_Date   = post.Published_Date,
+                Created_By_Name  = post.Created_By_Name,
+                Media            = media,
+                Mentions         = mentions,
+            };
+        }
 
         public async Task<List<BannerPostDTO>> GetBannerPostsAsync(bool takeLimit, List<int>? postTypeIds )
         {

@@ -46,6 +46,19 @@ namespace Alumni_Portal.Profiles.DTO
         public bool Individual_Is_Alumni { get; set; }
     }
 
+    public class IndividualProjectDTO
+    {
+        public int Map_ID { get; set; }
+        public int Project_ID { get; set; }
+        public string Project_Academic_ID { get; set; } = string.Empty;
+        public string Project_Name { get; set; } = string.Empty;
+        public string? Project_Type { get; set; }
+        public int? Project_Year { get; set; }
+        public bool? Is_Mentored { get; set; }
+        public bool? Is_Sponsored { get; set; }
+        public string? Individual_Role { get; set; }
+    }
+
     public record AddMemberRequest(int IndividualId, string Role);
     public record AddSponsorRequest(int IndividualId);
     public record AddTechStackRequest(string Technology_Value, string? Layer_Value);
@@ -134,6 +147,10 @@ namespace Alumni_Portal.Profiles.DTO
         public string Logo_Url { get; set; }
 
         public string Video_Url { get; set; }
+
+        public List<string> Tech_Stack { get; set; } = new();
+
+        public List<string> Members { get; set; } = new();
 
     }
 
