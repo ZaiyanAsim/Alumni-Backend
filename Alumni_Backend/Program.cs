@@ -133,7 +133,6 @@ builder.Services.AddRAIDInfrastructure(builder.Configuration);
 
 //HttpClient
 
-
 builder.Services.AddHttpClient("AuthorizedRAIDClient", client =>
 {
     client.BaseAddress = new Uri("https://raid-v2.init-global.com/raid-phase2-platform/api/");

@@ -124,6 +124,50 @@ namespace Alumni_Portal.RAID.Services
 
 
 
+        public async Task SendRegistrationApprovedAsync(string firstName, string lastName, string email, string userType)
+        {
+            if (string.IsNullOrWhiteSpace(email)) return;
+
+            this.client = _httpClientFactory.CreateClient("AuthorizedRAIDClient");
+            this.token  = await _loginService.GetEmailAuthorizationToken();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.token);
+
+            var subject = RegistrationApprovalEmailBuilder.BuildSubject(firstName, lastName);
+            var body    = RegistrationApprovalEmailBuilder.BuildBody(firstName, lastName, userType);
+
+            try
+            {
+                await SendMailAsync(6, new List<string> { email }, new List<string>(), subject, body);
+                _logger.LogInformation("Approval email sent to {Email}", email);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to send approval email to {Email}", email);
+            }
+        }
+
+        public async Task SendRegistrationRejectedAsync(string firstName, string lastName, string email)
+        {
+            if (string.IsNullOrWhiteSpace(email)) return;
+
+            this.client = _httpClientFactory.CreateClient("AuthorizedRAIDClient");
+            this.token  = await _loginService.GetEmailAuthorizationToken();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.token);
+
+            var subject = RegistrationRejectionEmailBuilder.BuildSubject(firstName, lastName);
+            var body    = RegistrationRejectionEmailBuilder.BuildBody(firstName, lastName);
+
+            try
+            {
+                await SendMailAsync(6, new List<string> { email }, new List<string>(), subject, body);
+                _logger.LogInformation("Rejection email sent to {Email}", email);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to send rejection email to {Email}", email);
+            }
+        }
+
         private async Task SendMailAsync(int client_Id, ICollection<string> toEmail, ICollection<string> ccEmail, string subject, string message)
         {
             

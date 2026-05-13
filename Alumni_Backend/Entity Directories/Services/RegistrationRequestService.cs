@@ -1,6 +1,7 @@
 using Alumni_Portal.Auth;
 using Alumni_Portal.Infrastructure.Data_Models;
 using Alumni_Portal.Infrastructure.Persistance;
+using Alumni_Portal.RAID.Services;
 using Entity_Directories.Services.DTO;
 using Microsoft.EntityFrameworkCore;
 using Shared.Custom_Exceptions.ExceptionClasses;
@@ -13,15 +14,18 @@ namespace Entity_Directories.Services
         private readonly RegistrationDbContext _regContext;
         private readonly IndividualDbContext   _individualContext;
         private readonly UserService           _userService;
+        private readonly EmailService          _emailService;
 
         public RegistrationRequestService(
             RegistrationDbContext regContext,
             IndividualDbContext   individualContext,
-            UserService          userService)
+            UserService          userService,
+            EmailService         emailService)
         {
             _regContext        = regContext;
             _individualContext = individualContext;
             _userService       = userService;
+            _emailService      = emailService;
         }
 
         public async Task SubmitAsync(SubmitRegistrationRequestDTO dto)
@@ -191,6 +195,8 @@ namespace Entity_Directories.Services
             req.Status      = "Approved";
             req.Reviewed_At = DateTime.UtcNow;
             await _regContext.SaveChangesAsync();
+
+            await _emailService.SendRegistrationApprovedAsync(req.First_Name, req.Last_Name, req.Email, req.User_Type);
         }
 
         public async Task RejectAsync(int requestId)
@@ -201,6 +207,8 @@ namespace Entity_Directories.Services
             req.Status      = "Rejected";
             req.Reviewed_At = DateTime.UtcNow;
             await _regContext.SaveChangesAsync();
+
+            await _emailService.SendRegistrationRejectedAsync(req.First_Name, req.Last_Name, req.Email);
         }
 
         private static DateTime? ParseDate(string? dateStr)
